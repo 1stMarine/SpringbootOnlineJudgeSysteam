@@ -1,0 +1,4 @@
+# Project exclude paths
+/common/target/
+/judger/target/
+/web_front/target/
