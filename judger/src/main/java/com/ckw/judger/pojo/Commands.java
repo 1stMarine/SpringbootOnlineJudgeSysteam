@@ -22,6 +22,9 @@ public class Commands {
     /**
      * WIN开发环境下Docker挂载目录
      */
+
+    public static boolean IS_LIN;
+
     public static String WIN_PATH;
     /**
      * Linux/Docker 挂载目录
@@ -43,7 +46,7 @@ public class Commands {
     /**
      * 执行代码命令
      */
-    public static String SHELL;
+    public static String SHELL = "timeout 2s time -ao time/time%i.txt -f %U:%M %name < in/in%i.txt > out/out%i.txt";
     /**
      * 停止容器命令
      */
@@ -53,7 +56,10 @@ public class Commands {
      */
     public static String DELETE;
 
-
+    @Value(value = "${isLin}")
+    public void setIsLin(boolean isLin) {
+        IS_LIN = isLin;
+    }
 
     @Value(value = "${win-root}")
     public void setWinRoot(String winRoot) {
@@ -85,10 +91,10 @@ public class Commands {
     public void setEXECUTE(String EXECUTE) {
         Commands.EXECUTE = EXECUTE;
     }
-    @Value(value = "${shell}")
-    public void setSHELL(String SHELL) {
-        Commands.SHELL = SHELL;
-    }
+//    @Value(value = "${shell}")
+//    public void setSHELL(String SHELL) {
+//        Commands.SHELL = SHELL;
+//    }
     @Value(value = "${stop}")
     public void setSTOP(String STOP) {
         Commands.STOP = STOP;

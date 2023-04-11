@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TestResult {
 
-    private String uid;
+    private int uid;
 
     private String questionName;
 
-    private String qid;
+    private int qid;
 
     private Double time;
 
-    private int memory;
+    private Double memory;
 
     private boolean isPass;
 
@@ -36,5 +36,7 @@ public class TestResult {
     /**
      * 编译或者运行报错放这里
      */
-    private String wrongMessage;
+
+    private String message;
+    private String title;
 }

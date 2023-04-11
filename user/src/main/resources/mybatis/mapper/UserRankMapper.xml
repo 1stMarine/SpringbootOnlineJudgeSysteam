@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应mapper接口所在的位置-->
+<mapper namespace="com.ckw.user.mapper.UserRankMapper">
+
+    <update id="updateRank">
+        insert into oj_user_rank values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (null,#{param2},#{param3},#{item.id},#{item.userName},)
+        </foreach>
+    </update>
+
+</mapper>

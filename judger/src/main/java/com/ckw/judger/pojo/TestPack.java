@@ -19,11 +19,12 @@ public class TestPack {
     /**
      * 必须 : 用户id
      */
-    private String uid;
+    private int uid;
+    private String userName;
     /**
      * 必须 : 题目id
      */
-    private String qid;
+    private int qid;
     /**
      * 题目名称
      */

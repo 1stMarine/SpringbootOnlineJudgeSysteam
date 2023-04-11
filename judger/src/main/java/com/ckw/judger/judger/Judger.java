@@ -1,5 +1,6 @@
 package com.ckw.judger.judger;
 
+import com.ckw.common.netty.NioWebSocketHandler;
 import com.ckw.judger.pojo.TestPack;
 import com.ckw.judger.pojo.TestResult;
 
@@ -23,16 +24,33 @@ public class Judger extends JudgeCore{
         //  初始化
         this.init();
         //  编译
+        NioWebSocketHandler.textWebSocketFrameHandler(
+                NioWebSocketHandler.userWebSocketId.get(String.valueOf(testPack.getUid())),
+                "2","编译中...","编译完毕"
+        );
         String compile = this.compile();
         System.out.println("编译 :" + compile);
         // 编译结果需要为空或null才是编译成功，可以继续执行代码
-        if(compile == "" || compile == null){
+        if("".equals(compile) || compile == null || " ".equals(compile)){
+            NioWebSocketHandler.textWebSocketFrameHandler(
+                    NioWebSocketHandler.userWebSocketId.get(String.valueOf(testPack.getUid())),
+                    "3","运行中...","运行完毕"
+            );
             String execute = this.execute();
             System.out.println("运行 :" + execute);
+        }else{
+            testResult.setPass(false);
+            testResult.setTitle("Compile Error");
+            testResult.setMessage(compile);
         }
 
         checkAnswer();
-
+        if(testResult.isPass()){
+            NioWebSocketHandler.textWebSocketFrameHandler(
+                    NioWebSocketHandler.userWebSocketId.get(String.valueOf(testPack.getUid())),
+                    "4","返回结果","运行完毕"
+            );
+        }
         return testResult;
 
     }

@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://43.139.235.208:3306/onlinejudge?serverTimezone=UTC
+      password: ckw335566
+      username: ckw
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: web_front
+  redis:
+    host: 43.139.235.208
+    port: 6379
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
+
+
+# mybatis
+mybatis:
+  mapper-locations: classpath*:/mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8080
+
+
+
+# token
+token:
+  privateKey: 'fdasfgdsagaxgsregdfdjyghjfhebfdgwe45ygrfbsdfshfdsag'
+  yangToken: 1000000
+  oldToken: 3000000000
