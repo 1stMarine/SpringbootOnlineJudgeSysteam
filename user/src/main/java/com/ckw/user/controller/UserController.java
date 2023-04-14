@@ -45,6 +45,7 @@ public class UserController {
 
     @PostMapping("/changeUserInfo")
     public Object changeUserInfo(@RequestBody User user){
+
         return new Message(State.SUCCESS,userServer.changeUserInfo(user),"操作成功!");
     }
 

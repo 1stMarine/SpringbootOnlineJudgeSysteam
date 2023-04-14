@@ -1,10 +1,11 @@
 package com.ckw.match.server;
 
 import com.ckw.match.pojo.Match;
+import com.ckw.question.pojo.MatchResult;
 
 import java.util.List;
 
-public interface MatchServer {
+public interface MatchService {
 
     public boolean addMatch(Match match);
 
@@ -17,4 +18,13 @@ public interface MatchServer {
     boolean participateMatch(int mid,int uid);
 
     List<String> getUserMatch(int uid);
+
+    List<MatchResult> getMatchResult(int mid);
+
+    /**
+     * 删除一个竞赛
+     * @param mid
+     * @return
+     */
+    boolean deleteMatch(int mid);
 }

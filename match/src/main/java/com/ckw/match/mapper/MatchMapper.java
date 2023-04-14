@@ -1,6 +1,7 @@
 package com.ckw.match.mapper;
 
 import com.ckw.match.pojo.Match;
+import com.ckw.user.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -32,5 +33,9 @@ public interface MatchMapper{
     boolean endMatch(int mid);
 
     List<Integer> getMatchUser(int mid);
+
+    List<User> getMatchUserObj(int mid);
+
+    boolean deleteMatch(int mid);
 
 }

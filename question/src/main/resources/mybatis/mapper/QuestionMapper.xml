@@ -10,7 +10,7 @@
     </select>
 <!--    得到全部题目-->
     <select id="queryQuestionList" resultType="com.ckw.question.pojo.Question">
-        select * from oj_question limit #{page},10
+        select * from oj_question limit #{page},15
     </select>
 <!--插入问题-->
     <insert id="insertQuestion" parameterType="com.ckw.question.pojo.Question">
@@ -57,7 +57,7 @@
     </select>
 
     <select id="searchQuestion" resultType="com.ckw.question.pojo.Question">
-        select * from oj_question where question_name like concat("%",#{search} ,"%")  limit #{page},10
+        select * from oj_question where question_name like concat("%",#{search} ,"%")  limit #{page},15
     </select>
 
     <update id="addTotalCount">
@@ -90,5 +90,14 @@
                                   <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
                                       #{item}
                                   </foreach>
+    </select>
+
+<!--    统计所有题目数量-->
+    <select id="countQuestion" resultType="int">
+        select count(id) from oj_question
+    </select>
+
+    <select id="getMatchQuestionIds" resultType="java.lang.String">
+        select qid from oj_match_question where mid = #{mid}
     </select>
 </mapper>

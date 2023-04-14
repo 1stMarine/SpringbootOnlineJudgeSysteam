@@ -38,4 +38,6 @@ public interface Questionserver {
      * @return
      */
     List<Question> querySearchQuestionList(int page,String search);
+
+    int countQuestion();
 }

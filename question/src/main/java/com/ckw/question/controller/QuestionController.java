@@ -49,4 +49,10 @@ public class QuestionController {
     public Object getQuestion(@PathVariable int id){
         return new Message(State.SUCCESS,questionServer.queryQuestion(id),"获取成功!");
     }
+
+
+    @GetMapping(value = "/countQuestion")
+    public Object countQuestion(){
+        return new Message(State.SUCCESS,questionServer.countQuestion(),"获取成功!");
+    }
 }

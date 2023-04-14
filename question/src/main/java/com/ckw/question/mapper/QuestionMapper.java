@@ -76,4 +76,12 @@ public interface QuestionMapper {
         List<Question> getQuestionSelectNightMare();
 
         List<Question> getMatchQuestion(List<String> qid);
+
+        /**
+         * 统计所有题目数量
+         * @return
+         */
+        int countQuestion();
+
+        List<String> getMatchQuestionIds(int mid);
 }

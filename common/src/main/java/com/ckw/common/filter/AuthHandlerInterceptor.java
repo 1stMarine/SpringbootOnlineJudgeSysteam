@@ -76,7 +76,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
             throw new TokenAuthExpireException();
         }
         //2.角色匹配.
-        if ("user".equals(userRole)) {
+        if ("普通用户".equals(userRole)) {
             log.info("========user账户============");
             return true;
         }

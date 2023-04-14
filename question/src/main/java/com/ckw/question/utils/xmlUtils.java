@@ -27,6 +27,7 @@ public class xmlUtils {
         SAXReader reader = new SAXReader();
         Document doc = null;
         try {
+            // 出现java.net.MalformedURLException: no protocol异常 ， 是因为使用了中文的文件名
             doc = reader.read(path);
         } catch (DocumentException e) {
             throw new RuntimeException(e);

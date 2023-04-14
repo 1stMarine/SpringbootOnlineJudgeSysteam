@@ -40,11 +40,11 @@ public class TestPack {
     /**
      * 必须 : 类型 -> 普通、运行测试、比赛
      */
-    private String type;
+    private Integer type;
     /**
      * 比赛id
      */
-    private String mid;
+    private Integer mid;
     /**
      * 测试样例对象集合
      */

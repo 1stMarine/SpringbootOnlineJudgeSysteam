@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
+
 @RestController
 public class DoScheduledController {
     @Autowired
@@ -49,7 +50,7 @@ public class DoScheduledController {
                 if(match.getState().equals("未开始")){
                     System.out.println("竞赛" + match.getMatchName() + " 未开始，进入开始竞赛监视");
                     MatchStartTask startTask = getStartTask(match);
-                    String corn = getCorn(match.getStartTime());
+                    String corn = getCorn(match.getStartTime() + ":00");
                     //将任务交给任务调度器执行
                     ScheduledFuture<?> schedule = threadPoolTaskScheduler.schedule(startTask, new CronTrigger(corn));
 
@@ -60,7 +61,7 @@ public class DoScheduledController {
                     scheduledFutureHolder.setCorn(corn);
 
                     MatchEndTask endTask = getMatchEndTask(match);
-                    corn = getCorn(match.getEndTime());
+                    corn = getCorn(match.getEndTime() + ":00");
                     //将任务交给任务调度器执行
                     schedule = threadPoolTaskScheduler.schedule(endTask, new CronTrigger(corn));
 

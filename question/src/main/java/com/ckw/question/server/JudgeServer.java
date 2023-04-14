@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface JudgeServer {
 
+    TestResult matchJudge(TestPack testPack);
+
+    TestResult normalJudge(TestPack testPack);
+
     public TestResult doJudge(TestPack testPack);
 
     public List<TestSample> getTestSamples(int id);
