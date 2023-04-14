@@ -23,7 +23,7 @@ public class Match {
     private String matchType;
     private String imgUrl;
     private String state;
-    private List<String> questionIds;
+    private List<Integer> questionIds;
 
     private List<Question> questions;
 }

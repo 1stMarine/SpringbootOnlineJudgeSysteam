@@ -80,5 +80,6 @@
                 location = #{location},
                 url = #{url},
                 gender = #{gender}
+        where id = #{id}
     </update>
 </mapper>

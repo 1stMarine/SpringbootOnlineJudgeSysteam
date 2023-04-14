@@ -9,4 +9,7 @@ public class State {
     public static int FAILURE = 40000;
 
     public static int UNAUTHORIZED = 40002;
+
+
+    public static String RECORD_AC_MARK = "Accept";
 }

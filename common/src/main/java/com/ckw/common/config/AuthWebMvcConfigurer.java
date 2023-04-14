@@ -30,6 +30,8 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer
                 .excludePathPatterns("/getQuestion/{qid}")
                 .excludePathPatterns("/getMatchList")
                 .excludePathPatterns("/getMatchDetail/{mid}")
+                .excludePathPatterns("/countQuestion")
+                .excludePathPatterns("/getMatchRank/{mid}")
         ;
     }
 

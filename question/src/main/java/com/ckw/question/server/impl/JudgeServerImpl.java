@@ -3,6 +3,7 @@ package com.ckw.question.server.impl;
 
 
 import com.ckw.common.netty.NioWebSocketHandler;
+import com.ckw.common.pojo.State;
 import com.ckw.common.utils.SnowflakeIdWorker;
 import com.ckw.question.mapper.RecordMapper;
 import com.ckw.judger.pojo.*;
@@ -11,10 +12,13 @@ import com.ckw.judger.utils.ContainerUtils;
 import com.ckw.question.mapper.QuestionMapper;
 
 
+import com.ckw.question.pojo.MatchResult;
 import com.ckw.question.pojo.TestSamples;
 import com.ckw.question.server.JudgeServer;
 import com.ckw.user.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class JudgeServerImpl implements JudgeServer {
     @Autowired
     public ContainerUtils containerUtils;
@@ -36,6 +41,17 @@ public class JudgeServerImpl implements JudgeServer {
 
     @Autowired
     public QuestionMapper questionMapper;
+
+    @Override
+    public TestResult matchJudge(TestPack testPack) {
+        // TODO 判断比赛开始没 健壮性
+        return doJudge(testPack);
+    }
+
+    @Override
+    public TestResult normalJudge(TestPack testPack) {
+        return doJudge(testPack);
+    }
 
     @Override
     public TestResult doJudge(TestPack testPack) {
@@ -86,6 +102,7 @@ public class JudgeServerImpl implements JudgeServer {
     @Transactional(rollbackFor = Exception.class)
     public boolean setting(TestResult testResult,TestPack testPack ){
         boolean flag = false;
+//        报存编译记录
         flag = saveSubmitRecord(new SubmitRecord(
                 SnowflakeIdWorker.nextId(),
                 testResult.getUid(),
@@ -116,6 +133,48 @@ public class JudgeServerImpl implements JudgeServer {
         questionMapper.addTotalCount(
                 testResult.isPass() ? 1 : 0,1, testPack.getQid()
         );
+        return flag;
+    }
+
+    public boolean settingForMatch(TestResult testResult,TestPack testPack){
+        boolean flag = false;
+//        记录比赛时提交记录
+        flag = recordMapper.addMatchRecord(new SubmitRecord(
+                SnowflakeIdWorker.nextId(),
+                testResult.getUid(),
+                testResult.getQid(),
+                testPack.getQuestionName(),
+                testResult.getTime(),
+                testResult.getMemory(),
+                testPack.getLanguage(),
+                testPack.getCode(),
+                testPack.getSubmitTimeFormat(),
+                testResult.getTitle(),
+                testResult.getMessage(),
+                testResult.getTestSample() == null ? "{}" :
+                        String.format("{\"input\":\"%s\",\"output\":\"%s\",\"userOutput\":\"%s\"}",
+                                testResult.getTestSample().getInput(),
+                                testResult.getTestSample().getOutput(),
+                                testResult.getTestSample().getUserOutput()
+                        ),
+                testPack.getUserName()),testPack.getMid());
+//        更新结果
+        MatchResult userMatchResult = recordMapper.getUserMatchResult(testPack.getMid(), testPack.getUid());
+        JSONObject jsonObject = new JSONObject(userMatchResult.getResults());
+        log.info("{}",testResult);
+        if(State.RECORD_AC_MARK.equals(jsonObject.get(String.valueOf(testPack.getQid())))){
+//            已经通过了，就不用进行接下来的操作
+            return flag;
+        }
+        jsonObject.put(String.valueOf(testResult.getQid()),testResult.getTitle());
+        userMatchResult.setResults(jsonObject.toString());
+//        通过加分
+        if(testResult.isPass()){
+            userMatchResult.setTotalScore(userMatchResult.getTotalScore()+1);
+        }
+        log.info("{}",userMatchResult);
+        recordMapper.updateUserMatchResult(userMatchResult);
+//        没通过减分
         return flag;
     }
 

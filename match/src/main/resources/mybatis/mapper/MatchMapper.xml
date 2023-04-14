@@ -6,7 +6,7 @@
 <mapper namespace="com.ckw.match.mapper.MatchMapper">
 
     <select id="getMatchList" resultType="com.ckw.match.pojo.Match">
-        select * from oj_match_list;
+        select * from oj_match_list order by id desc ;
     </select>
 
     <select id="getStartOrEndMatchs" resultType="com.ckw.match.pojo.Match">
@@ -40,7 +40,7 @@
         select * from oj_match_list where id = #{id}
     </select>
 
-    <select id="getMatchQuestionIds" resultType="java.lang.String">
+    <select id="getMatchQuestionIds" resultType="java.lang.Integer">
         select qid from oj_match_question where mid = #{mid}
     </select>
 
@@ -61,4 +61,16 @@
     <select id="getMatchUser" resultType="int">
         select uid from oj_match_user where mid = #{mid}
     </select>
+
+    <select id="getMatchUserObj" resultType="com.ckw.user.pojo.User">
+        select * from oj_user left join oj_match_user ou on ou.uid = oj_user.id where mid = #{mid}
+    </select>
+
+    <delete id="deleteMatch">
+        delete from oj_match_list where id = #{mid};
+    </delete>
+
+    <update id="addParticipateCount">
+        update oj_match_list set partcipation_count = partcipation_count+1 where id = #{mid}
+    </update>
 </mapper>

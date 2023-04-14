@@ -1,6 +1,7 @@
 package com.ckw.match.mapper;
 
 import com.ckw.match.pojo.Match;
+import com.ckw.user.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,12 +17,12 @@ public interface MatchMapper{
 
     List<Match> getStartOrEndMatchs();
 
-    boolean addMatchQuestion(@Param("list") List<String> list, @Param("mid") int mid);
+    boolean addMatchQuestion(@Param("list") List<Integer> list, @Param("mid") int mid);
 
 
     Match getMatchDetail(int id);
 
-    List<String> getMatchQuestionIds(int mid);
+    List<Integer> getMatchQuestionIds(int mid);
 
     boolean addMatchUser(int uid,int mid);
 
@@ -33,4 +34,11 @@ public interface MatchMapper{
 
     List<Integer> getMatchUser(int mid);
 
+    List<User> getMatchUserObj(int mid);
+
+    boolean deleteMatch(int mid);
+    /**
+     * 增加参赛人数
+     */
+    boolean addParticipateCount(int mid);
 }

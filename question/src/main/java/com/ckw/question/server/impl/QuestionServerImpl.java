@@ -54,6 +54,7 @@ public class QuestionServerImpl implements Questionserver {
 
     @Override
     public List<Question> queryQuestionList(int page) {
+        page *= 15;
         return computedPassRate(questionMapper.queryQuestionList(page));
     }
 
@@ -70,6 +71,11 @@ public class QuestionServerImpl implements Questionserver {
     @Override
     public List<Question> querySearchQuestionList(int page, String search) {
         return computedPassRate(questionMapper.searchQuestion(page, search));
+    }
+
+    @Override
+    public int countQuestion() {
+        return questionMapper.countQuestion();
     }
 
     public List<Question> computedPassRate(List<Question> questions){
