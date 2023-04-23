@@ -12,6 +12,9 @@ java 8
 
 安装好Docker后执行:
 
+```shell
 c++/c : docker pull echocen/gcc:v1
 java : docker pull echocen/openjdk:v1
 python : docker pull echocen/python:v1
+
+```
