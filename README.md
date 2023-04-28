@@ -44,6 +44,10 @@ echocen/gcc       v1        f0da4088ed72   11 months ago   1.29GB
 
 除了挂载目录和存储目录以外，其他不需要更改
 
+### 数据
+
+根目录的oj.sql文件
+请在web_front/src/main/resources/application.yml 配置你的数据库
 # 效果图
 ![eb4770b623c063f2cc61108c71a1383](https://user-images.githubusercontent.com/91200734/233857296-4796e241-39dc-4b0d-8414-d9e5b7eaffd8.png)
 ![4fff8c8d51e42b7d269b4c5617c8267](https://user-images.githubusercontent.com/91200734/233857298-9ca542f1-415f-49af-9409-1445e8972354.png)
