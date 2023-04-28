@@ -1,14 +1,14 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://43.139.235.208:3306/onlinejudge?serverTimezone=UTC
-      password: ckw335566
-      username: ckw
+      url: url
+      password: password
+      username: username
       driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: web_front
   redis:
-    host: 43.139.235.208
+    host: localhost
     port: 6379
     lettuce:
       pool:
