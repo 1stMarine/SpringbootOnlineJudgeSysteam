@@ -1,5 +1,5 @@
 # 前情提要
-项目运行地址预览: judger/src/main/resources/application-judge.properties
+项目运行地址预览: [judger/src/main/resources/application-judge.properties](https://www.nextstepcode.club/)
 
 基于Springboot + Vue3的Onlinejudge在线判题系统
 
