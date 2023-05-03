@@ -32,19 +32,23 @@ public class JudgeController {
          */
         TestResult testResult = null;
         boolean setting = false;
-        if(testPack.getType().equals(Type.MATCH)){
-            testResult = judgeServer.matchJudge(testPack);
-            setting = judgeServer.settingForMatch(testResult,testPack);
-            log.info("竞赛提交");
-        }else if(testPack.getType().equals(Type.NORMAL)){
+        try {
+            if(testPack.getType().equals(Type.MATCH)){
+                testResult = judgeServer.matchJudge(testPack);
+                setting = judgeServer.settingForMatch(testResult,testPack);
+                log.info("竞赛提交");
+            }else if(testPack.getType().equals(Type.NORMAL)){
 //            普通提交走这里
-            log.info("普通提交");
-            testResult = judgeServer.normalJudge(testPack);
-            setting = judgeServer.setting(testResult, testPack);
-        }else{
-            return new Message(State.FAILURE,null,"提交失败,没有这个提交选项");
-        }
+                log.info("普通提交");
+                testResult = judgeServer.normalJudge(testPack);
+                setting = judgeServer.setting(testResult, testPack);
+            }else{
+                return new Message(State.FAILURE,null,"提交失败,没有这个提交选项");
+            }
 
+        }catch (Exception e){
+
+        }
 
         return new Message(State.SUCCESS,testResult, !setting ? "提交失败,请联系管理员!":"提交成功!");
     }

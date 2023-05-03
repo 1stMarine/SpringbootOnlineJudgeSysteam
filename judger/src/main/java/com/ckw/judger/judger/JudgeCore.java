@@ -1,5 +1,6 @@
 package com.ckw.judger.judger;
 
+import com.ckw.common.utils.SnowFlow;
 import com.ckw.judger.pojo.Commands;
 import com.ckw.judger.pojo.TestPack;
 import com.ckw.judger.pojo.TestResult;
@@ -62,7 +63,7 @@ public abstract class JudgeCore {
         // 代码路径
         codePath =  testPack.getUid() + "/"
                     + testPack.getQid() + "/"
-                    + testPack.getSubmitTime();
+                    + new SnowFlow(1,1,1).nextId();
         // 完整代码路径
         userCodePath = Commands.IS_LIN ? Commands.LIN_ROOT + codePath : Commands.WIN_ROOT + codePath;
         log.info(Commands.IS_LIN ? " 当前是linux系统" : "当前是windows");
@@ -395,7 +396,7 @@ public abstract class JudgeCore {
                 return;
             }
             totalTime += Double.parseDouble(splitTimeAndMemory(userTimes.get(i))[0]);
-            totalMemory += Integer.parseInt(splitTimeAndMemory(userTimes.get(i))[1]);
+            totalMemory += Double.parseDouble(splitTimeAndMemory(userTimes.get(i))[1]);
         }
         testResult.setTime((totalTime / userTimes.size() * 1000));
         testResult.setMemory((double) (totalMemory / userTimes.size() / 1024));
@@ -424,8 +425,12 @@ public abstract class JudgeCore {
 
     public boolean checkTimeAndMemory(String timeAndMemory){
         String[] s = splitTimeAndMemory(timeAndMemory);
+
+        if(s[0].startsWith("Command")){
+            s[0] = s[0].split("zerostatus")[1];
+        }
         double time = Double.parseDouble(s[0]);
-        int memory = Integer.parseInt(s[1]);
+        int memory = (int) Double.parseDouble(s[1]);
         if(time > testPack.getTimeLimit() || memory > testPack.getMemoryLimit()){
             return true;
         }

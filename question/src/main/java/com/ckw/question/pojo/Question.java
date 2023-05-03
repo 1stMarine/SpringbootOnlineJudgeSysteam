@@ -79,4 +79,6 @@ public class Question {
      * 通过率
      */
     private double passRate;
+
+    private int privateState = 0;
 }

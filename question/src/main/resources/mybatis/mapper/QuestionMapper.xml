@@ -6,11 +6,11 @@
     <mapper namespace="com.ckw.question.mapper.QuestionMapper">
 <!--得到问题根据id-->
     <select id="queryQuestion" resultType="com.ckw.question.pojo.Question">
-        select * from oj_question where id = #{id}
+        select * from oj_question where id = #{id} and private_state = 0
     </select>
 <!--    得到全部题目-->
     <select id="queryQuestionList" resultType="com.ckw.question.pojo.Question">
-        select * from oj_question limit #{page},15
+        select * from oj_question where  private_state = 0 limit #{page},15
     </select>
 <!--插入问题-->
     <insert id="insertQuestion" parameterType="com.ckw.question.pojo.Question">
@@ -30,7 +30,8 @@
                                         #{totalAttempt},
                                         #{resource},
                                         #{tag},
-                                        0.0
+                                        0.0,
+                                        #{privateState}
                                        )
     </insert>
 <!--插入测试样例-->
@@ -94,7 +95,7 @@
 
 <!--    统计所有题目数量-->
     <select id="countQuestion" resultType="int">
-        select count(id) from oj_question
+        select count(id) from oj_question where private_state = 0
     </select>
 
     <select id="getMatchQuestionIds" resultType="java.lang.String">

@@ -26,7 +26,13 @@ public class ContainerUtils {
      */
     @Async
     public void deleteContainer(String id){
-        doCommand(Arrays.asList(Commands.STOP.replace("%id",id).split(",")));
+        System.out.println(id);
+        System.out.println(Commands.STOP.replace("%id",id));
+        String replace = Commands.STOP.replace("%id", id);
+        System.out.println(replace);
+        String[] split = replace.split(",");
+                System.out.println(split.length);
+        doCommand(Arrays.asList(split));
         doCommand(Arrays.asList(Commands.DELETE.replace("%id",id).split(",")));
     }
     public String doCommand(List<String> commands){

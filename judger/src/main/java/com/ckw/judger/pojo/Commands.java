@@ -50,11 +50,11 @@ public class Commands {
     /**
      * 停止容器命令
      */
-    public static String STOP;
+    public static String STOP = "docker,stop,%id";
     /**
      * 删除容器命令
      */
-    public static String DELETE;
+    public static String DELETE = "docker,rm,%id";
 
     @Value(value = "${isLin}")
     public void setIsLin(boolean isLin) {
@@ -95,12 +95,5 @@ public class Commands {
 //    public void setSHELL(String SHELL) {
 //        Commands.SHELL = SHELL;
 //    }
-    @Value(value = "${stop}")
-    public void setSTOP(String STOP) {
-        Commands.STOP = STOP;
-    }
-    @Value(value = "${delete}")
-    public void setDELETE(String DELETE) {
-        Commands.DELETE = DELETE;
-    }
+
 }

@@ -53,6 +53,7 @@ public class WekaServiceImpl implements WekaService {
             //outputWordCounts:值为true时，记录单词在文档中出现的次数，而不是boolean值。
             filter.setOutputWordCounts(true);
             Instances dataFiltered = Filter.useFilter(instances, filter);
+
             //k-means
             SimpleKMeans skm = new SimpleKMeans();
             skm.setDisplayStdDevs(false);
@@ -68,6 +69,8 @@ public class WekaServiceImpl implements WekaService {
             ClusterEvaluation eval = new ClusterEvaluation();
             eval.setClusterer(skm);
             eval.evaluateClusterer(dataFiltered);
+
+            System.out.println("-----------------------------------eval");
 
             // 遍历每个簇
 //        词频
@@ -85,6 +88,7 @@ public class WekaServiceImpl implements WekaService {
 
                 //                    新增arrayList
                 hashMap.computeIfAbsent(skm.clusterInstance(dataFiltered.get(i)), k1 -> new ArrayList<>());
+                System.out.println(dataFiltered.get(i));
 //                这个样本新增测试样例
                 hashMap.get(skm.clusterInstance(dataFiltered.get(i))).add(records.get(i));
             }

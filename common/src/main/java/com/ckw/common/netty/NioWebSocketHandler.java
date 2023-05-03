@@ -26,7 +26,7 @@ public class NioWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFr
     private NioWebSocketChannelPool webSocketChannelPool;
     @Autowired
     private WebSocketProperties webSocketProperties;
-
+    public final static boolean CTX = true;
     public static Map<String,ChannelHandlerContext> userWebSocketId = new HashMap<>();
 
     @Override
@@ -105,6 +105,9 @@ public class NioWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFr
      */
     public static void textWebSocketFrameHandler(ChannelHandlerContext ctx, String code,String title,String message) {
         // 客户端发送过来的内容不进行业务处理，原样返回
+        if(!CTX){
+            return;
+        }
         ctx.channel().writeAndFlush(new TextWebSocketFrame("" +
                 "{\"code\":" + code + "," +
                 "\"title\":\"" + title + "\"," +

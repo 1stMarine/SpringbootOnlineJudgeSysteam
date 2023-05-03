@@ -36,6 +36,7 @@ public class xmlUtils {
         String title = root.elementText("title");
         int timeLimit = Integer.parseInt(root.elementText("time_limit"));
         int memoryLimit = Integer.parseInt(root.elementText("memory_limit"));
+        int aPrivate = Integer.parseInt(root.elementText("private"));
         String description = root.elementText("description");
         String inputStyle = root.elementText("input_style");
         String outputStyle = root.elementText("output_style");
@@ -52,6 +53,10 @@ public class xmlUtils {
 
         String testInputs = getXmlListToString(root.element("test_inputs").elements());
         String testOutputs = getXmlListToString(root.element("test_outputs").elements());
+
+
+
+        System.out.println(aPrivate);
 
         int id = SnowflakeIdWorker.nextId();
 
@@ -80,7 +85,8 @@ public class xmlUtils {
                 resource,
                 tag,
                 testSamples,
-                0.0
+                0.0,
+                aPrivate
         );
 
 

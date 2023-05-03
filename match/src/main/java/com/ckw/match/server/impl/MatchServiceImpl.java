@@ -72,6 +72,7 @@ public class MatchServiceImpl implements MatchService {
         Match matchDetail = matchMapper.getMatchDetail(mid);
         matchDetail.setQuestions(matchQuestion);
         matchDetail.setQuestionIds(matchQuestionIds);
+
         return matchDetail;
     }
 

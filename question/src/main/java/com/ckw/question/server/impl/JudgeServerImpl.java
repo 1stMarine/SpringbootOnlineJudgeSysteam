@@ -129,7 +129,7 @@ public class JudgeServerImpl implements JudgeServer {
             updateExperienceAndLevel(testPack.getQid(), testPack.getUid());
             userMapper.changeUserResolve(questionMapper.queryQuestion(testPack.getQid()).getDifficulty(), testPack.getUid());
         }
-//         更改题目总尝试\总通过
+         //更改题目总尝试\总通过
         questionMapper.addTotalCount(
                 testResult.isPass() ? 1 : 0,1, testPack.getQid()
         );
