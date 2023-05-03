@@ -8,6 +8,7 @@ class WebFrontApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

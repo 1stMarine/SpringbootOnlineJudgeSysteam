@@ -3,15 +3,15 @@ package com.ckw.judger.judger;
 import com.ckw.judger.pojo.Commands;
 import com.ckw.judger.pojo.TestPack;
 import com.ckw.judger.pojo.TestResult;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * @author 凯威
  * 判题机核心
  */
+@Slf4j
 public abstract class JudgeCore {
     /**
      * 测试对象
@@ -49,12 +50,13 @@ public abstract class JudgeCore {
                 testPack.getUid(),
                 testPack.getQuestionName(),
                 testPack.getQid(),
-                0.0,0,
+                0.0,0.0,
                 false,
                 testPack.getSubmitTimeFormat(),
                 testPack.getCode(),
                 null,
-                "测试通过 : "
+                "Accept",
+                "Accept"
         );
 
         // 代码路径
@@ -62,8 +64,9 @@ public abstract class JudgeCore {
                     + testPack.getQid() + "/"
                     + testPack.getSubmitTime();
         // 完整代码路径
-        userCodePath = Commands.WIN_ROOT + codePath;
-
+        userCodePath = Commands.IS_LIN ? Commands.LIN_ROOT + codePath : Commands.WIN_ROOT + codePath;
+        log.info(Commands.IS_LIN ? " 当前是linux系统" : "当前是windows");
+        System.out.println("userCodePath"+userCodePath);
         //        创建判题目录
         new File(userCodePath).mkdirs();
         //  输入测试样例文件夹
@@ -89,7 +92,7 @@ public abstract class JudgeCore {
         //  容器类型
         String type = "";
         switch (testPack.getLanguage()){
-            case "cpp":
+            case "Cpp_c":
 //                编译名
                 compileName = "g++ test.cpp";
 //                执行名
@@ -187,7 +190,7 @@ public abstract class JudgeCore {
         String containerId = doCommand(
                 Arrays.asList(
                         Commands.CREATE
-                                .replace("%h", Commands.WIN_PATH)
+                                .replace("%h", Commands.IS_LIN ? Commands.LIN_PATH : Commands.WIN_PATH)
                                 .replace("%d", Commands.LIN_PATH)
                                 .replace("%name",type)
                                 .split(",")
@@ -226,7 +229,7 @@ public abstract class JudgeCore {
         StringBuilder result = new StringBuilder();
 
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
-        System.out.println(processBuilder.command());
+        log.info(processBuilder.command().toString());
 
         processBuilder.directory(new File(userCodePath));
 
@@ -271,8 +274,34 @@ public abstract class JudgeCore {
                 throw new RuntimeException(e);
             }
         }
-
+        orderFiles(files);
         return files;
+    }
+
+    /**
+     * 工具函数 对文件根据编号进行排序
+     * 加载文件名一旦数量多会乱序，跟答案对不上
+     * @param files
+     */
+    private void orderFiles(List<File> files){
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return getIndex(o1.getName()) - getIndex(o2.getName());
+            }
+        });
+    }
+
+    /**
+     * 正则提取数字
+     * @param fileName 文件名
+     * @return 文件编号
+     */
+    private int getIndex(String fileName){
+        String regEx = "[^0-9]";
+        Pattern file1Name = Pattern.compile(regEx);
+        Matcher matcher = file1Name.matcher(fileName);
+        return Integer.parseInt(matcher.replaceAll("").trim());
     }
 
     /**
@@ -283,12 +312,13 @@ public abstract class JudgeCore {
     public List<String> getFilesContent(List<File> files){
 
         Iterator<File> iterator = files.iterator();
-        ArrayList<String> contents = new ArrayList<>();
+        List<String> contents = new ArrayList<>();
         while(iterator.hasNext()){
+            File file = iterator.next();
             BufferedReader bufferedReader = null;
             StringBuilder content = new StringBuilder();
             try {
-                bufferedReader = new BufferedReader(new FileReader(iterator.next()));
+                bufferedReader = new BufferedReader(new FileReader(file));
                 String line = null;
                 while((line = bufferedReader.readLine()) != null){
                     content.append(line);
@@ -347,26 +377,28 @@ public abstract class JudgeCore {
         int totalMemory = 0;
         for (int i = 0; i < userTimes.size(); i++) {
             if(checkError(userOutputs.get(i))){
-                setPackError(userOutputs.get(i));
+                setPackError("代码在运行过程中发生了一些错误，请检查!",userOutputs.get(i));
                 return;
             }
            if( checkTimeAndMemory(userTimes.get(i))){
-               setPackError("内存/时间超出限制");
+               setPackError("内存/时间超出限制"," 你的时间或者空间超出限制了，尝试优化代码");
                return;
            }
             if(checkUserOut(
-                    testPack.getTestSampleList().get(i).getInput(),
+                    testPack.getTestSampleList().get(i).getOutput(),
                     userOutputs.get(i)
             )){
-                setPackError("答案错误,出现在第 " + (i+1) + " 个个测试样例");
+                System.out.println(testPack.getTestSampleList().get(i).getOutput() + " ====================== " + userOutputs.get(i));
+                setPackError("WrongAnswer","答案错误,出现在第 " + (i+1) + " 个测试样例");
+                testPack.getTestSampleList().get(i).setUserOutput(userOutputs.get(i));
                 testResult.setTestSample(testPack.getTestSampleList().get(i));
                 return;
             }
             totalTime += Double.parseDouble(splitTimeAndMemory(userTimes.get(i))[0]);
             totalMemory += Integer.parseInt(splitTimeAndMemory(userTimes.get(i))[1]);
         }
-        testResult.setTime((totalTime / userTimes.size()));
-        testResult.setMemory((totalMemory / userTimes.size()));
+        testResult.setTime((totalTime / userTimes.size() * 1000));
+        testResult.setMemory((double) (totalMemory / userTimes.size() / 1024));
         testResult.setPass(true);
     }
 
@@ -404,8 +436,9 @@ public abstract class JudgeCore {
         return !out.equals(userOut);
     }
 
-    public void setPackError(String errorMsg){
-        testResult.setWrongMessage(errorMsg);
+    public void setPackError(String message,String longMessage){
+        testResult.setTitle(message);
+        testResult.setMessage(longMessage);
     }
 
 }

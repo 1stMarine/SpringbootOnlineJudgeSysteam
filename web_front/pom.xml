@@ -21,6 +21,11 @@
     <dependencies>
         <dependency>
             <groupId>com.ckw</groupId>
+            <artifactId>match</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ckw</groupId>
             <artifactId>judger</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -29,10 +34,25 @@
             <artifactId>common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.ckw</groupId>
+            <artifactId>question</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ckw</groupId>
+            <artifactId>user</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

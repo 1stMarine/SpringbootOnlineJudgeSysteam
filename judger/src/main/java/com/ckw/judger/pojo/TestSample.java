@@ -15,7 +15,7 @@ public class TestSample {
     /**
      * 题目id
      */
-    private String qid;
+    private int qid;
     /**
      * 标准输入
      */

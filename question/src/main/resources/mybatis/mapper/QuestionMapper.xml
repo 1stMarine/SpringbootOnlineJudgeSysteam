@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!--namespace对应mapper接口所在的位置-->
+    <mapper namespace="com.ckw.question.mapper.QuestionMapper">
+<!--得到问题根据id-->
+    <select id="queryQuestion" resultType="com.ckw.question.pojo.Question">
+        select * from oj_question where id = #{id}
+    </select>
+<!--    得到全部题目-->
+    <select id="queryQuestionList" resultType="com.ckw.question.pojo.Question">
+        select * from oj_question limit #{page},15
+    </select>
+<!--插入问题-->
+    <insert id="insertQuestion" parameterType="com.ckw.question.pojo.Question">
+        insert into oj_question values (
+                                        #{id},
+                                        #{questionName},
+                                        #{inputStyle},
+                                        #{outputStyle},
+                                        #{dataRange},
+                                        #{inputSample},
+                                        #{outputSample},
+                                        #{difficulty},
+                                        #{timeLimit},
+                                        #{memoryLimit},
+                                        #{description},
+                                        #{totalPass},
+                                        #{totalAttempt},
+                                        #{resource},
+                                        #{tag},
+                                        0.0
+                                       )
+    </insert>
+<!--插入测试样例-->
+    <insert id="insertTestSamples" parameterType="com.ckw.question.pojo.Question">
+        insert into oj_question_sample values (
+                                               null,
+                                               #{id},
+                                               #{questionName},
+                                               #{testSamples.sampleInput},
+                                               #{testSamples.sampleOutput}
+                                              )
+    </insert>
+<!--得到测试样例 根据id-->
+    <select id="getTestSample" resultType="com.ckw.question.pojo.TestSamples">
+        select * from oj_question_sample where qid = #{id}
+    </select>
+<!--得到题目的时间限制-->
+    <select id="getQuestionTimeLimit" resultType="int">
+        select time_limit,memory_limit from oj_question where id = #{id}
+    </select>
+<!--    得到题目的空间限制-->
+    <select id="getQuestionMemoryLimit" resultType="int">
+        select memory_limit from oj_question where id = #{id}
+    </select>
+
+    <select id="searchQuestion" resultType="com.ckw.question.pojo.Question">
+        select * from oj_question where question_name like concat("%",#{search} ,"%")  limit #{page},15
+    </select>
+
+    <update id="addTotalCount">
+        update oj_question set total_attempt = total_attempt+1
+               <if test="param1 == 1">
+                   ,total_pass = total_pass + 1
+               </if>
+        where id = #{id}
+    </update>
+
+    <select id="getQuestionDifficulty" resultType="string">
+        select difficulty from oj_question where id = #{qid}
+    </select>
+
+    <select id="getQuestionSelectEasy" resultType="com.ckw.question.pojo.Question">
+        select id,question_name,difficulty from oj_question where difficulty like '简单'
+    </select>
+    <select id="getQuestionSelectMeddle" resultType="com.ckw.question.pojo.Question">
+        select id,question_name,difficulty from oj_question where difficulty like '中等'
+    </select>
+    <select id="getQuestionSelectHard" resultType="com.ckw.question.pojo.Question">
+        select id,question_name,difficulty from oj_question where difficulty like '困难'
+    </select>
+    <select id="getQuestionSelectNightMare" resultType="com.ckw.question.pojo.Question">
+        select id,question_name,difficulty from oj_question where difficulty like '噩梦'
+    </select>
+
+    <select id="getMatchQuestion" resultType="com.ckw.question.pojo.Question">
+        select * from oj_question where id in
+                                  <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+                                      #{item}
+                                  </foreach>
+    </select>
+
+<!--    统计所有题目数量-->
+    <select id="countQuestion" resultType="int">
+        select count(id) from oj_question
+    </select>
+
+    <select id="getMatchQuestionIds" resultType="java.lang.String">
+        select qid from oj_match_question where mid = #{mid}
+    </select>
+</mapper>

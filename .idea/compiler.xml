@@ -7,8 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="common" />
+        <module name="match" />
         <module name="judger" />
+        <module name="common" />
+        <module name="question" />
+        <module name="user" />
         <module name="web_front" />
       </profile>
     </annotationProcessing>
@@ -18,6 +21,9 @@
       <module name="codesky" options="" />
       <module name="common" options="-parameters" />
       <module name="judger" options="-parameters" />
+      <module name="match" options="-parameters" />
+      <module name="question" options="-parameters" />
+      <module name="user" options="-parameters" />
       <module name="web_front" options="-parameters" />
     </option>
   </component>
