@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应mapper接口所在的位置-->
+<mapper namespace="com.ckw.user.mapper.UserMapper">
+    <insert id="addUser" parameterType="com.ckw.user.pojo.User">
+        insert into oj_user values (
+                                       #{id},
+                                       #{nickName},
+                                       #{email},
+                                       #{password},
+                                       #{experience},
+                                       #{level},
+                                       #{rank},
+                                       #{location},
+                                       #{school},
+                                       #{tag},
+                                       #{gender},
+                                       #{easyResolve},
+                                       #{meddleResolve},
+                                       #{hardResolve},
+                                       #{nightmareResolve},
+                                       #{role},
+                                       #{url}
+                                   )
+    </insert>
+    <select id="existUser" resultType="int">
+        select count(id) from oj_user where email = #{email}
+    </select>
+    <select id="getUser" resultType="com.ckw.user.pojo.User">
+        select * from oj_user where email = #{email}
+    </select>
+    <select id="getUserById" resultType="com.ckw.user.pojo.User">
+        select * from oj_user where id = #{id}
+    </select>
+<!--得到所有用户-->
+    <select id="getUserListForSort" resultType="com.ckw.user.pojo.User">
+        select * from oj_user order by experience desc
+    </select>
+    <update id="changeUserResolve">
+        update oj_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="difficulty == '简单'">
+                easy_resolve=easy_resolve+1,
+            </if>
+            <if test="difficulty == '中等'">
+                meddle_resolve=meddle_resolve+1,
+            </if>
+            <if test="difficulty == '困难'">
+                hard_resolve=hard_resolve+1,
+            </if>
+            <if test="difficulty == '噩梦'">
+                nightmare_resolve=nightmare_resolve+1,
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="addExperience">
+        update oj_user set experience = experience + #{param1} where id = #{param2}
+    </update>
+
+    <select id="getLevel" resultType="int">
+        select level from oj_user where id = #{uid}
+    </select>
+
+    <update id="addLevel">
+        update oj_user set level=level+1 where id = #{uid}
+    </update>
+<!--得到用户经验值-->
+    <select id="getExperience" resultType="int">
+        select experience from oj_user where id = #{uid}
+    </select>
+<!--修改个人信息-->
+    <update id="changeUserInfo" parameterType="com.ckw.user.pojo.User">
+        update oj_user
+            set nick_name = #{nickName},
+                school = #{school},
+                location = #{location},
+                url = #{url},
+                gender = #{gender}
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应mapper接口所在的位置-->
+<mapper namespace="com.ckw.match.mapper.MatchMapper">
+
+    <select id="getMatchList" resultType="com.ckw.match.pojo.Match">
+        select * from oj_match_list order by id desc ;
+    </select>
+
+    <select id="getStartOrEndMatchs" resultType="com.ckw.match.pojo.Match">
+        select * from oj_match_list where state like '未开始' or state like '已开始'
+    </select>
+
+    <insert id="addMatch" parameterType="com.ckw.match.pojo.Match">
+        insert into oj_match_list values (
+        #{id},
+        #{matchName},
+        #{matchDescription},
+        #{createTime},
+        #{startTime},
+        #{endTime},
+        #{persistentTime},
+        #{participationCount},
+        #{matchType},
+        #{imgUrl},
+        #{state}
+        )
+    </insert>
+
+    <insert id="addMatchQuestion" >
+        insert into oj_match_question values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (null,#{item},#{mid})
+        </foreach>
+    </insert>
+
+    <select id="getMatchDetail" resultType="com.ckw.match.pojo.Match">
+        select * from oj_match_list where id = #{id}
+    </select>
+
+    <select id="getMatchQuestionIds" resultType="integer">
+        select qid from oj_match_question where mid = #{mid}
+    </select>
+
+    <insert id="addMatchUser" >
+        insert into oj_match_user values (null,#{mid},#{uid})
+    </insert>
+
+    <select id="getUserMatch" resultType="string">
+        select mid from oj_match_user where uid = #{uid}
+    </select>
+    <update id="startMatch" >
+        update oj_match_list set state = '已开始' where id = #{mid}
+    </update>
+    <update id="endMatch">
+        update oj_match_list set state = '已结束' where id = #{mid}
+    </update>
+
+    <select id="getMatchUser" resultType="int">
+        select uid from oj_match_user where mid = #{mid}
+    </select>
+
+    <select id="getMatchUserObj" resultType="com.ckw.user.pojo.User">
+        select * from oj_user left join oj_match_user ou on ou.uid = oj_user.id where mid = #{mid}
+    </select>
+
+    <delete id="deleteMatch">
+        delete from oj_match_list where id = #{mid};
+    </delete>
+
+    <update id="addParticipateCount">
+        update oj_match_list set participation_count = participation_count + 1 where id = #{mid}
+    </update>
+</mapper>
