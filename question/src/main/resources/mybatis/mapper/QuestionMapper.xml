@@ -9,8 +9,14 @@
         select * from oj_question where id = #{id} and private_state = 0
     </select>
 <!--    得到全部题目-->
+<!--    select * from oj_question where  private_state = 0 limit #{page},15-->
     <select id="queryQuestionList" resultType="com.ckw.question.pojo.Question">
-        select * from oj_question where  private_state = 0 limit #{page},15
+            select * from oj_question left join oj_user_resolve our on oj_question.id = our.qid
+                <if test="param2 != 0">
+                    where our.uid = #{param2} or our.uid is null
+                </if>
+                    having private_state = 0
+                       limit #{param1},15
     </select>
 <!--插入问题-->
     <insert id="insertQuestion" parameterType="com.ckw.question.pojo.Question">

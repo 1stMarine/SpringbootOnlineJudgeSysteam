@@ -81,4 +81,8 @@ public class Question {
     private double passRate;
 
     private int privateState = 0;
+    /**
+     * 用户是否通过
+     */
+    private int uid;
 }

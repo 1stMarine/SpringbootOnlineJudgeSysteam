@@ -1,10 +1,10 @@
 package com.ckw.question.server.impl;
 
 import com.ckw.question.mapper.QuestionMapper;
+import com.ckw.question.mapper.RecordMapper;
 import com.ckw.question.pojo.Question;
 import com.ckw.question.server.Questionserver;
 import com.ckw.question.utils.xmlUtils;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class QuestionServerImpl implements Questionserver {
+
+    @Autowired
+    private RecordMapper recordMapper;
 
     Path path = Paths.get("question/src/main/resources/question-xml");
 
@@ -53,10 +56,12 @@ public class QuestionServerImpl implements Questionserver {
 
 
     @Override
-    public List<Question> queryQuestionList(int page) {
+    public List<Question> queryQuestionList(int page,int uid) {
         page *= 15;
-        return computedPassRate(questionMapper.queryQuestionList(page));
+        return computedPassRate(questionMapper.queryQuestionList(page,uid));
     }
+
+
 
     @Override
     public List<List<Question>> getQuestionSelect() {
@@ -78,10 +83,21 @@ public class QuestionServerImpl implements Questionserver {
         return questionMapper.countQuestion();
     }
 
+    /**
+     * 得到用户解决过的题目
+     *
+     * @param uid 用户id
+     * @return 已题目列表
+     */
+    @Override
+    public List<Integer> getUserResolveQuestionId(int uid) {
+        return recordMapper.getUserResolveRecord(uid);
+    }
+
     public List<Question> computedPassRate(List<Question> questions){
         for (Question question : questions) {
             if(question.getTotalAttempt() != 0){
-                DecimalFormat df = new DecimalFormat("#.0000");
+                DecimalFormat df = new DecimalFormat("#.0");
                 question.setPassRate(
                         Double.parseDouble(df.format(((question.getTotalPass() * 1.0) / (question.getTotalAttempt() * 1.0))))
                 );

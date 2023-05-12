@@ -1,35 +1,3 @@
 spring:
-  datasource:
-    druid:
-      url: url
-      password: password
-      username: username
-      driver-class-name: com.mysql.cj.jdbc.Driver
-  application:
-    name: web_front
-  redis:
-    host: localhost
-    port: 6379
-    lettuce:
-      pool:
-        max-idle: 16
-        max-active: 32
-        min-idle: 8
-
-
-# mybatis
-mybatis:
-  mapper-locations: classpath*:/mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-server:
-  port: 8080
-
-
-
-# token
-token:
-  privateKey: 'fdasfgdsagaxgsregdfdjyghjfhebfdgwe45ygrfbsdfshfdsag'
-  yangToken: 1000000
-  oldToken: 3000000000
+  profiles:
+    active: dev

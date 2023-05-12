@@ -14,13 +14,13 @@ public class ExceptionAdvice {
 
 
 
-    @ExceptionHandler(RuntimeException.class)
+//    @ExceptionHandler(Exception.class)
     @ResponseBody
     public Message handleException(RuntimeException e) {
-        logger.error("异常信息：", e.getMessage());
+        logger.error("异常信息：", e.toString());
         Message result = new Message();
         result.setState(State.FAILURE);
-        result.setMessage(e.getMessage());
+        result.setMessage(e.toString());
         return result;
     }
 

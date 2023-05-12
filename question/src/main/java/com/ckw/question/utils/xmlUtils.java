@@ -86,7 +86,8 @@ public class xmlUtils {
                 tag,
                 testSamples,
                 0.0,
-                aPrivate
+                aPrivate,
+                0
         );
 
 

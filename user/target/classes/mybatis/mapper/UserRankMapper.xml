@@ -12,4 +12,38 @@
         </foreach>
     </update>
 
+    <select id="getTotalUser" resultType="integer">
+        select count(id) from oj_user
+    </select>
+
+    <select id="getPerMonthUserSubmit" resultType="com.ckw.user.pojo.UserMonthSubmit">
+        select * from oj_user_month_submit where uid = #{param1} and year = #{param2}
+    </select>
+
+    <select id="getPerDayUserSubmit" resultType="com.ckw.user.pojo.UserDaySubmit">
+        select * from oj_user_day_submit where uid = #{param1} and submit_date like #{param2}
+    </select>
+<!--    日-->
+    <select id="checkDaySubmit" resultType="integer">
+        select count(id) from oj_user_day_submit where submit_date like #{param1} and uid = #{param2}
+    </select>
+    
+    <insert id="insertDaySubmit">
+        insert into oj_user_day_submit values (null,#{param1},1,#{param2})
+    </insert>
+
+    <update id="addDayUserSubmit">
+         update oj_user_day_submit set submit_date = submit_date + 1 where submit_date = #{param1} and uid = #{param2}
+    </update>
+
+<!--    月-->
+    <select id="checkMonthSubmit" resultType="integer">
+        select count(id) from oj_user_month_submit where year like #{param1} and month = #{param2} and uid = #{param3}
+    </select>
+    <insert id="insertMonthSubmit">
+        insert into oj_user_month_submit values (null,#{param1},#{param2},#{param3},1)
+    </insert>
+    <update id="addMonthUserSubmit" >
+        update oj_user_month_submit set count = count + 1 where year = #{param1} and month = #{param2} and uid = #{param3}
+    </update>
 </mapper>

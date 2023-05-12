@@ -5,6 +5,7 @@ import com.ckw.common.pojo.State;
 import com.ckw.common.utils.TokenUtil;
 import com.ckw.user.pojo.User;
 import com.ckw.user.server.Impl.UserServerImpl;
+import com.ckw.user.server.Impl.UserSubmitInfoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,8 @@ public class UserController {
     @Autowired
     private TokenUtil tokenUtil;
 
+    @Autowired
+    private UserSubmitInfoServiceImpl userSubmitInfoService;
     @PostMapping("/registerUser")
     public Object register(@RequestBody User user){
 
@@ -52,5 +55,16 @@ public class UserController {
     @GetMapping("/loadUserInfo/{uid}")
     public Object loadUserInfo(@PathVariable int uid){
         return new Message(State.SUCCESS,userServer.loadUserInfo(uid),"操作成功!");
+    }
+
+
+    @GetMapping("/getUserMonthSubmit/{uid}")
+    public Object getUserMonthSubmit(@PathVariable int uid){
+        return new Message(State.SUCCESS,userSubmitInfoService.getMonthSubmit(uid),"获取成功！");
+    }
+
+    @GetMapping("/getUserDaySubmit/{uid}")
+    public Object getUserDaySubmit(@PathVariable int uid){
+        return new Message(State.SUCCESS,userSubmitInfoService.getDaySubmit(uid),"获取成功！");
     }
 }

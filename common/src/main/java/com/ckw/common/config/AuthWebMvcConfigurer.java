@@ -25,7 +25,7 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/registerUser")
-                .excludePathPatterns("/getQuestionList/{page}")
+                .excludePathPatterns("/getQuestionList/{page}/{uid}")
                 .excludePathPatterns("/getSubmitRecordsWithQid/{qid}/{page}")
                 .excludePathPatterns("/getQuestion/{qid}")
                 .excludePathPatterns("/getMatchList")

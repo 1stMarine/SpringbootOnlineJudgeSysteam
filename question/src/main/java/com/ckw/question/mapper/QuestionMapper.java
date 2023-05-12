@@ -19,13 +19,13 @@ public interface QuestionMapper {
          * @param id
          * @return 题目对象
          */
-        public Question queryQuestion(int id);
+        Question queryQuestion(int id);
 
         /**
          * 得到所有题目
          * @return
          */
-        public List<Question> queryQuestionList(int page);
+        List<Question> queryQuestionList(int page,int uid);
 
         /**
          * 插入一道题目

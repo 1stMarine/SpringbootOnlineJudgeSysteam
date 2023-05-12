@@ -2,6 +2,7 @@ package com.ckw.question.mapper;
 
 import com.ckw.judger.pojo.SubmitRecord;
 import com.ckw.question.pojo.MatchResult;
+import com.ckw.question.pojo.UserResolve;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -40,4 +41,32 @@ public interface RecordMapper {
     boolean addUserMatchResult(MatchResult matchResult);
 //    得到竞赛的所有结果
     List<MatchResult> getMatchResult(int mid);
+
+//    得到用户解决过的问题
+    List<Integer> getUserResolveRecord(int uid);
+
+    /**
+     * 添加用户解决的问题
+     * @param uid
+     * @param qid
+     * @return
+     */
+    boolean addUserResolve(int uid,int qid);
+
+    /**
+     * 查询用户是否解决过这个问题
+     * @param uid
+     * @param qid
+     * @return
+     */
+    int queryUserResolveQuestion(int uid,int qid);
+
+    /**
+     * 得到各个解决难度的数量
+     * @param uid
+     * @return
+     */
+    UserResolve getPerDifficultySolve(int uid);
+
+    int countPerDifficultyCount(String difficulty);
 }

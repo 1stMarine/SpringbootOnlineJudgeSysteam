@@ -94,4 +94,24 @@
     <select id="getMatchResult" resultType="com.ckw.question.pojo.MatchResult">
         select * from oj_match_result where mid = #{mid} order by total_score desc
     </select>
+    
+    <select id="getUserResolveRecord" resultType="integer">
+        select qid from oj_user_resolve where uid = #{uid}
+    </select>
+
+    <insert id="addUserResolve">
+        insert into oj_user_resolve values (null,#{param1},#{param2})
+    </insert>
+
+    <select id="queryUserResolveQuestion" resultType="integer">
+        select count(id) from oj_user_resolve where uid = #{param1} and qid = #{param2}
+    </select>
+
+    <select id="getPerDifficultySolve" resultType="com.ckw.question.pojo.UserResolve">
+        select easy_resolve,meddle_resolve,hard_resolve,nightmare_resolve from oj_user where id = #{uid}
+    </select>
+
+    <select id="countPerDifficultyCount" resultType="integer">
+        select count(*) from oj_question where difficulty like #{difficulty}
+    </select>
 </mapper>

@@ -66,6 +66,7 @@ public abstract class JudgeCore {
                     + new SnowFlow(1,1,1).nextId();
         // 完整代码路径
         userCodePath = Commands.IS_LIN ? Commands.LIN_ROOT + codePath : Commands.WIN_ROOT + codePath;
+
         log.info(Commands.IS_LIN ? " 当前是linux系统" : "当前是windows");
         System.out.println("userCodePath"+userCodePath);
         //        创建判题目录

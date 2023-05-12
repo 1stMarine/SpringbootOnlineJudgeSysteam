@@ -20,7 +20,7 @@ public interface Questionserver {
      * 得到所有题目
      * @return 题目对象集合
      */
-    public List<Question> queryQuestionList(int page);
+    public List<Question> queryQuestionList(int page,int uid);
 
 
     List<List<Question>> getQuestionSelect();
@@ -40,4 +40,11 @@ public interface Questionserver {
     List<Question> querySearchQuestionList(int page,String search);
 
     int countQuestion();
+
+    /**
+     * 得到用户解决过的题目
+     * @param uid 用户id
+     * @return 已题目列表
+     */
+    List<Integer> getUserResolveQuestionId(int uid);
 }

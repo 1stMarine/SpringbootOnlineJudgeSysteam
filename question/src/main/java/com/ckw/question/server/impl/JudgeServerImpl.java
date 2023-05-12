@@ -4,6 +4,7 @@ package com.ckw.question.server.impl;
 
 import com.ckw.common.netty.NioWebSocketHandler;
 import com.ckw.common.pojo.State;
+import com.ckw.common.utils.DateUtils;
 import com.ckw.common.utils.SnowflakeIdWorker;
 import com.ckw.question.mapper.RecordMapper;
 import com.ckw.judger.pojo.*;
@@ -16,6 +17,7 @@ import com.ckw.question.pojo.MatchResult;
 import com.ckw.question.pojo.TestSamples;
 import com.ckw.question.server.JudgeServer;
 import com.ckw.user.mapper.UserMapper;
+import com.ckw.user.mapper.UserRankMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +44,9 @@ public class JudgeServerImpl implements JudgeServer {
     @Autowired
     public QuestionMapper questionMapper;
 
+    @Autowired
+    private UserRankMapper userRankMapper;
+
     @Override
     public TestResult matchJudge(TestPack testPack) {
         // TODO 判断比赛开始没 健壮性
@@ -64,6 +69,7 @@ public class JudgeServerImpl implements JudgeServer {
         Long time = System.currentTimeMillis();
 //        拉取测试样例
         List<TestSample> testSamples = getTestSamples(testPack.getQid());
+
         testPack.setTestSampleList(testSamples);
 //        时间内空间
         testPack.setMemoryLimit(questionMapper.getQuestionMemoryLimit(testPack.getQid()));
@@ -127,15 +133,52 @@ public class JudgeServerImpl implements JudgeServer {
         if(testResult.isPass()){
 //            增加经验值、等级
             updateExperienceAndLevel(testPack.getQid(), testPack.getUid());
-            userMapper.changeUserResolve(questionMapper.queryQuestion(testPack.getQid()).getDifficulty(), testPack.getUid());
+//            确认这到底没有解锁过
+            if(recordMapper.queryUserResolveQuestion(testPack.getUid(), testPack.getQid()) == 0){
+//                增加结题数量
+                String difficulty = questionMapper.queryQuestion(testPack.getQid()).getDifficulty();
+                log.info(difficulty+"====="+testPack.getUid());
+                userMapper.changeUserResolve(difficulty, testPack.getUid());
+//                添加到已解决题目列表
+                recordMapper.addUserResolve(testPack.getUid(), testPack.getQid());
+            }
+//            增加日、月解题数量
+            String date = (DateUtils.getYear() + "-" + DateUtils.getMonth() + "-" + DateUtils.getDay());
+            int i = userRankMapper.checkDaySubmit(date, testPack.getUid());
+//            有就修改数量、没有就新增
+            if(i != 0){
+                userRankMapper.addDayUserSubmit(date, testPack.getUid());
+            }else{
+                userRankMapper.insertDaySubmit(date, testPack.getUid());
+            }
+
+            i = userRankMapper.checkMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+            if(i != 0){
+                userRankMapper.addMonthUserSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+            }else{
+                userRankMapper.insertMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+            }
         }
-         //更改题目总尝试\总通过
-        questionMapper.addTotalCount(
-                testResult.isPass() ? 1 : 0,1, testPack.getQid()
-        );
+
         return flag;
     }
 
+    /**
+     * 必要设置，不参与事务回滚
+     * @param testResult
+     * @param testPack
+     * @return
+     */
+    public boolean mustSetting(TestResult testResult,TestPack testPack ){
+        //更改题目总尝试\总通过
+        boolean b = questionMapper.addTotalCount(
+                testResult.isPass() ? 1 : 0, 1, testPack.getQid()
+        );
+
+        return b;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     public boolean settingForMatch(TestResult testResult,TestPack testPack){
         boolean flag = false;
 //        记录比赛时提交记录
@@ -215,8 +258,12 @@ public class JudgeServerImpl implements JudgeServer {
     public List<TestSample> getTestSamples(int id) {
         TestSamples testSamples = questionMapper.getTestSample(id);
 //        json解码
-        JSONArray inputs = new JSONArray(testSamples.getSampleInput());
-        JSONArray outputs = new JSONArray(testSamples.getSampleOutput());
+        JSONArray inputs = new JSONArray();
+        JSONArray outputs = new JSONArray();
+        if(testSamples != null){
+            inputs = new JSONArray(testSamples.getSampleInput());
+            outputs = new JSONArray(testSamples.getSampleOutput());
+        }
 
         List<TestSample> testSample = new ArrayList<>();
 //        遍历组装
