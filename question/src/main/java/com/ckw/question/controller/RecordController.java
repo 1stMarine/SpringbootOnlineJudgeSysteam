@@ -22,21 +22,21 @@ public class RecordController {
     private WekaServiceImpl wekaService;
 
     @GetMapping("/getSubmitRecords/{uid}/{qid}/{page}")
-    public Object getSubmitRecordsWithUidAndQid(@PathVariable int uid,@PathVariable int qid,@PathVariable int page){
+    public Object getSubmitRecordsWithUidAndQid(@PathVariable long uid,@PathVariable long qid,@PathVariable int page){
         return new Message(State.SUCCESS,recordServer.getSubmitRecordList(uid,qid,page),"获取成功!");
     }
     @GetMapping("/getSubmitRecordsWithQid/{qid}/{page}")
-    public Object getSubmitRecordsWithQid(@PathVariable int qid,@PathVariable int page){
+    public Object getSubmitRecordsWithQid(@PathVariable long qid,@PathVariable int page){
         return new Message(State.SUCCESS,recordServer.getSubmitRecordList(qid,page),"获取成功!");
     }
 
     @GetMapping("/getSubmitRecordsWithUid/{uid}/{page}")
-    public Object getSubmitRecordsWithUid(@PathVariable int uid,@PathVariable int page){
+    public Object getSubmitRecordsWithUid(@PathVariable long uid,@PathVariable int page){
         return new Message(State.SUCCESS,recordServer.getSubmitRecordListWithUid(uid,page),"获取成功!");
     }
 
     @GetMapping("/getMatchSubmitCluster/{mid}")
-    public Object getMatchSubmitCluster(@PathVariable int mid){
+    public Object getMatchSubmitCluster(@PathVariable long mid){
         return new Message(State.SUCCESS,wekaService.calculate(mid),"操作成功！");
     }
 

@@ -1,20 +1,42 @@
 spring:
   datasource:
     druid:
-      url:
-      password:
-      username:
+      url: jdbc:mysql://localhost:3306/onlinejudge?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=true  # 你需要更改的配置
+      password:  # 你需要更改的配置
+      username:  # 你需要更改的配置
       driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: web_front
+#    redis
   redis:
-    host: localhost
+    host:  # 你需要更改的配置
     port: 6379
     lettuce:
       pool:
         max-idle: 16
         max-active: 32
         min-idle: 8
+    password:  # 你需要更改的配置
+  mail:
+    host: smtp.qq.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: 邮箱地址  # 你需要更改的配置
+    password: smtp密钥  # 你需要更改的配置
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
 
 
 # mybatis
@@ -26,10 +48,26 @@ mybatis:
 server:
   port: 8080
 
-
+# docker
+docker:
+  host: tcp://localhost:2375  # 你需要更改的配置
+  apiVersion: 23.0.1
 
 # token
 token:
   privateKey: 'fdasfgdsagaxgsregdfdjyghjfhebfdgwe45ygrfbsdfshfdsag'
   yangToken: 1000000
   oldToken: 3000000000
+
+#  minio 在线图床地址
+minio:
+#  例如 http://www.nextstepcode.club:9000/online-image-bed/
+  urlPrefix: httpL//localhost:9000/桶名  # 你需要更改的配置
+  endpoint: http://localhost:9000  # 你需要更改的配置
+#  密钥
+  accessKey:  # 你需要更改的配置
+  secretKey:   # 你需要更改的配置
+#  桶名字
+  bucketName: online-image-bed  # 你需要更改的配置
+
+#email

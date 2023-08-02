@@ -132,7 +132,7 @@ public abstract class JudgeCore {
 
     /**
      * 设置编译命令
-     * @param compileName   编译命令 + 文件名
+     * @param compileName   编译命令 + 文件名~~~~~~
      */
     public void setCompileCommand(String compileName){
         testPack.setCompileCommand(
@@ -146,7 +146,7 @@ public abstract class JudgeCore {
     /**
      * 设置执行shell
      * 设置运行command
-     * @param executeName 运行命令 + 编译后文件名
+     * @param executeName 运行命令 + 编译后文件名~~~~~~~
      */
     public void setExecuteCommand(String executeName){
 //        设置运行命令
@@ -202,8 +202,8 @@ public abstract class JudgeCore {
     }
 
     /**
-     * 执行编译
-     * @return 返回结果为空值即为编译成功否则返回编译错误信息
+     * 执行编译~!~
+     * @return 返回结果为空值即为编译成功否则返回编译错误信息~~~
      */
     public String compile(){
         // 如果已经编译过不再编译
@@ -214,7 +214,7 @@ public abstract class JudgeCore {
     }
 
     /**
-     * 执行代码
+     * 执行代码~~
      * @return
      */
     public String execute(){
@@ -222,8 +222,8 @@ public abstract class JudgeCore {
     }
 
     /**
-     * 工具函数 执行命令
-     * @param commands 需要执行的命令
+     * 工具函数 执行命令~~
+     * @param commands 需要执行的命令~~~
      * @return
      */
     public String doCommand(List<String> commands){

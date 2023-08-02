@@ -11,6 +11,6 @@ public interface WekaService {
 
     public int findBestK(List<String> texts) throws Exception;
 
-    Map<Integer, List<SubmitRecord>> calculate(int mid);
+    Map<Integer, List<SubmitRecord>> calculate(long mid);
 
 }

@@ -18,19 +18,19 @@ public class RecordServerImpl implements RecordServer {
 
 
     @Override
-    public List<SubmitRecord> getSubmitRecordList(int uid, int qid, int page) {
+    public List<SubmitRecord> getSubmitRecordList(long uid, long qid, int page) {
         page--;
         return recordMapper.getSubmitRecordList(uid,qid,page);
     }
 
     @Override
-    public List<SubmitRecord> getSubmitRecordList(int qid, int page) {
+    public List<SubmitRecord> getSubmitRecordList(long qid, int page) {
         page--;
         return recordMapper.getSubmitRecordListWithQid(qid,page);
     }
 
     @Override
-    public List<SubmitRecord> getSubmitRecordListWithUid(int uid, int page) {
+    public List<SubmitRecord> getSubmitRecordListWithUid(long uid, int page) {
         page--;
         return recordMapper.getSubmitRecordListWithUid(uid,page);
     }

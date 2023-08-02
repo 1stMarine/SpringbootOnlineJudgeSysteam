@@ -110,7 +110,7 @@ public class JudgeServerImpl implements JudgeServer {
         boolean flag = false;
 //        报存编译记录
         flag = saveSubmitRecord(new SubmitRecord(
-                SnowflakeIdWorker.nextId(),
+                SnowflakeIdWorker.snowFlow.nextId(),
                 testResult.getUid(),
                 testResult.getQid(),
                 testPack.getQuestionName(),
@@ -141,23 +141,25 @@ public class JudgeServerImpl implements JudgeServer {
                 userMapper.changeUserResolve(difficulty, testPack.getUid());
 //                添加到已解决题目列表
                 recordMapper.addUserResolve(testPack.getUid(), testPack.getQid());
-            }
-//            增加日、月解题数量
-            String date = (DateUtils.getYear() + "-" + DateUtils.getMonth() + "-" + DateUtils.getDay());
-            int i = userRankMapper.checkDaySubmit(date, testPack.getUid());
+
+                //            增加日、月解题数量,未解决的需要增加
+                String date = (DateUtils.getYear() + "-" + DateUtils.getMonth() + "-" + DateUtils.getDay());
+                int i = userRankMapper.checkDaySubmit(date, testPack.getUid());
 //            有就修改数量、没有就新增
-            if(i != 0){
-                userRankMapper.addDayUserSubmit(date, testPack.getUid());
-            }else{
-                userRankMapper.insertDaySubmit(date, testPack.getUid());
+                if(i != 0){
+                    userRankMapper.addDayUserSubmit(date, testPack.getUid());
+                }else{
+                    userRankMapper.insertDaySubmit(date, testPack.getUid());
+                }
+
+                i = userRankMapper.checkMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+                if(i != 0){
+                    userRankMapper.addMonthUserSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+                }else{
+                    userRankMapper.insertMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
+                }
             }
 
-            i = userRankMapper.checkMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
-            if(i != 0){
-                userRankMapper.addMonthUserSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
-            }else{
-                userRankMapper.insertMonthSubmit(DateUtils.getYear(),DateUtils.getMonth(), testPack.getUid());
-            }
         }
 
         return flag;
@@ -181,9 +183,8 @@ public class JudgeServerImpl implements JudgeServer {
     @Transactional(rollbackFor = Exception.class)
     public boolean settingForMatch(TestResult testResult,TestPack testPack){
         boolean flag = false;
-//        记录比赛时提交记录
-        flag = recordMapper.addMatchRecord(new SubmitRecord(
-                SnowflakeIdWorker.nextId(),
+        SubmitRecord submitRecord = new SubmitRecord(
+                SnowflakeIdWorker.snowFlow.nextId(),
                 testResult.getUid(),
                 testResult.getQid(),
                 testPack.getQuestionName(),
@@ -200,7 +201,13 @@ public class JudgeServerImpl implements JudgeServer {
                                 testResult.getTestSample().getOutput(),
                                 testResult.getTestSample().getUserOutput()
                         ),
-                testPack.getUserName()),testPack.getMid());
+                testPack.getUserName());
+//        记录比赛时提交记录
+        flag = recordMapper.addMatchRecord(submitRecord,testPack.getMid());
+//        普通的编译记录也要保存
+        flag = saveSubmitRecord(submitRecord);
+
+
 //        更新结果
         MatchResult userMatchResult = recordMapper.getUserMatchResult(testPack.getMid(), testPack.getUid());
         JSONObject jsonObject = new JSONObject(userMatchResult.getResults());
@@ -222,7 +229,7 @@ public class JudgeServerImpl implements JudgeServer {
     }
 
     @Override
-    public void updateExperienceAndLevel(int qid, int uid) {
+    public void updateExperienceAndLevel(long qid, long uid) {
         String questionDifficulty = questionMapper.getQuestionDifficulty(qid);
         int experience = 0;
         switch (questionDifficulty){
@@ -255,7 +262,7 @@ public class JudgeServerImpl implements JudgeServer {
      * @return 测试用例集合
      */
     @Override
-    public List<TestSample> getTestSamples(int id) {
+    public List<TestSample> getTestSamples(long id) {
         TestSamples testSamples = questionMapper.getTestSample(id);
 //        json解码
         JSONArray inputs = new JSONArray();

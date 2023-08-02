@@ -1,7 +1,7 @@
 package com.ckw.common.netty;
 
 
-import com.ckw.common.utils.RequestUriUtils;
+import com.ckw.common.websocket.RequestUriUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -114,7 +114,18 @@ public class NioWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFr
                 "\"message\":\"" + message + "\"}"
         ));
     }
+    /**
+     * 创建连接之后，客户端发送的消息都会在这里处理
+     * @param ctx
 
+     */
+    public static void ObjectWebSocketFrameHandler(ChannelHandlerContext ctx, Object object) {
+        // 客户端发送过来的内容不进行业务处理，原样返回
+        if(!CTX){
+            return;
+        }
+        ctx.channel().writeAndFlush(object);
+    }
 
 
     /**

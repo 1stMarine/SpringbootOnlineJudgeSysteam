@@ -50,20 +50,24 @@ public class MatchStartTask implements Runnable {
         matchMapper.startMatch(match.getId());
         System.out.println(match.getMatchName() +  " 竞赛开始 ");
 //        竞赛结果添加
-        List<Integer> matchQuestionIds = matchMapper.getMatchQuestionIds(match.getId());
+        List<String> matchQuestionIds = matchMapper.getMatchQuestionIds(match.getId());
         JSONObject jsonObject = new JSONObject();
-        for (Integer qid : matchQuestionIds) {
-            jsonObject.put(String.valueOf(qid),"Empty");
+        for (String qid : matchQuestionIds) {
+            jsonObject.put(qid,"Empty");
         }
         List<User> matchUserObj = matchMapper.getMatchUserObj(match.getId());
         for (User user : matchUserObj) {
             MatchResult matchResult = new MatchResult(
-                    SnowflakeIdWorker.nextId(),
+                    SnowflakeIdWorker.snowFlow.nextId(),
                     user.getId(),
                     user.getNickName(),
                     match.getId(),
                     jsonObject.toString(),
-                    0 );
+                    user.getEmail(),
+                    user.getUrl(),
+                    0
+
+            );
             recordMapper.addUserMatchResult(matchResult);
         }
 //        开始竞赛任务

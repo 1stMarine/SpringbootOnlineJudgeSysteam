@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserQuestionService {
 
-    List<UserResolveDto> getUserResolve(int uid);
+    List<UserResolveDto> getUserResolve(long uid);
 
-    List<UserResolveDto> getUserResolveWithPercent(int uid);
+    List<UserResolveDto> getUserResolveWithPercent(long uid);
 }

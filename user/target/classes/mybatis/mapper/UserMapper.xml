@@ -22,7 +22,9 @@
                                        #{hardResolve},
                                        #{nightmareResolve},
                                        #{role},
-                                       #{url}
+                                       #{url},
+                                       #{sign},
+                                    0,0,false
                                    )
     </insert>
     <select id="existUser" resultType="int">
@@ -37,6 +39,9 @@
 <!--得到所有用户-->
     <select id="getUserListForSort" resultType="com.ckw.user.pojo.User">
         select * from oj_user order by experience desc
+    </select>
+    <select id="getUserList" resultType="com.ckw.user.pojo.User">
+        select * from oj_user limit #{page},15
     </select>
     <update id="changeUserResolve">
         update oj_user
@@ -79,7 +84,36 @@
                 school = #{school},
                 location = #{location},
                 url = #{url},
-                gender = #{gender}
+                gender = #{gender},
+                tag = #{tag},
+                sign = #{sign}
         where id = #{id}
     </update>
+
+    <update id="changeUserFansCount">
+        update oj_user set fans = fans + #{param2} where id = #{param1}
+    </update>
+    <update id="changeUserSubscribeCount">
+        update oj_user set subscribe = subscribe + #{param2} where id = #{param1}
+    </update>
+<!--    一开始的状态是关注 1为关注 0 为未关注-->
+    <insert id="addUserFans">
+        insert into oj_user_subscribe values(null,#{param1},#{param2},1,#{param3})
+    </insert>
+
+    <update id="changeSubscribeState">
+        update oj_user_subscribe set state = #{param3} where uid = #{param1} and fans_uid = #{param2}
+    </update>
+
+    <select id="querySubscribeState" resultType="integer">
+        select count(id) from oj_user_subscribe where uid = #{param1} and fans_uid = #{param2}
+    </select>
+
+    <update id="updateUserBanState">
+        update oj_user set ban = #{param2} where id = #{param1}
+    </update>
+
+    <select id="userCount" resultType="Integer">
+        select count(id) from oj_user
+    </select>
 </mapper>

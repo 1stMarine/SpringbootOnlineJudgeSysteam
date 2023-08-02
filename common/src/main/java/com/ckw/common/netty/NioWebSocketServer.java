@@ -41,7 +41,7 @@ public class NioWebSocketServer implements InitializingBean, DisposableBean {
                     .channel(NioServerSocketChannel.class)
                     .localAddress(webSocketProperties.getPort())
                     .childHandler(webSocketChannelInitializer);
-
+            log.info("Netty Port : {}",webSocketProperties.getPort());
             channelFuture = serverBootstrap.bind().sync();
         } finally {
             if (channelFuture != null && channelFuture.isSuccess()) {

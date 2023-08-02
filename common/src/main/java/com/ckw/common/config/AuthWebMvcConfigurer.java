@@ -32,6 +32,12 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer
                 .excludePathPatterns("/getMatchDetail/{mid}")
                 .excludePathPatterns("/countQuestion")
                 .excludePathPatterns("/getMatchRank/{mid}")
+                .excludePathPatterns("/getBlogList/{page}/{size}/{uid}/{type}")
+                .excludePathPatterns("/queryBlog/{uid}/{bid}")
+                .excludePathPatterns("/getCommentsList/{bid}/{uid}")
+                .excludePathPatterns("/queryBlogByContent/{content}/{uid}")
+                .excludePathPatterns("/getMatchUserImgUrl/{mid}")
+                .excludePathPatterns("/sendVerCode")
         ;
     }
 

@@ -92,10 +92,12 @@
     </insert>
 
     <select id="getMatchResult" resultType="com.ckw.question.pojo.MatchResult">
-        select * from oj_match_result where mid = #{mid} order by total_score desc
+        select oj_match_result.id,mid,uid,user_name,results,total_score,url,email  from oj_match_result
+                 left join oj_user on oj_match_result.uid = oj_user.id
+                 where mid = #{mid} order by total_score desc
     </select>
     
-    <select id="getUserResolveRecord" resultType="integer">
+    <select id="getUserResolveRecord" resultType="long">
         select qid from oj_user_resolve where uid = #{uid}
     </select>
 

@@ -1,6 +1,8 @@
 package com.ckw.match.pojo;
 
 import com.ckw.judger.pojo.TestResult;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

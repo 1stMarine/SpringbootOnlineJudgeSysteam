@@ -1,6 +1,7 @@
 package com.ckw.question.server;
 
 import com.ckw.question.pojo.Question;
+import com.ckw.question.pojo.TestSamples;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,12 +16,12 @@ public interface Questionserver {
      * @param id 题目id
      * @return 题目对象
      */
-    public Question queryQuestion(int id);
+    Question queryQuestion(long id);
     /**
      * 得到所有题目
      * @return 题目对象集合
      */
-    public List<Question> queryQuestionList(int page,int uid);
+    List<Question> queryQuestionList(int page,long uid);
 
 
     List<List<Question>> getQuestionSelect();
@@ -29,7 +30,7 @@ public interface Questionserver {
      * @param file
      * @return
      */
-    public String uploadQuestionXml(MultipartFile file);
+    String uploadQuestionXml(MultipartFile file);
 
     /**
      *
@@ -46,5 +47,28 @@ public interface Questionserver {
      * @param uid 用户id
      * @return 已题目列表
      */
-    List<Integer> getUserResolveQuestionId(int uid);
+    List<Long> getUserResolveQuestionId(long uid);
+
+    TestSamples getQuestionTestSample(String qid);
+
+    /**
+     * 更改题目信息
+     * @param question
+     * @return
+     */
+    boolean changeQuestionInfo(Question question);
+
+    /**
+     * 删除题目
+     * @param qid
+     * @return
+     */
+    boolean deleteQuestion(String qid);
+
+    /**
+     * 添加题目
+     * @param question
+     * @return
+     */
+    boolean addQuestion(Question question);
 }

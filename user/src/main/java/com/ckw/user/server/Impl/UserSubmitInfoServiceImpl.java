@@ -18,8 +18,7 @@ import java.util.Map;
 @Service
 public class UserSubmitInfoServiceImpl implements UserSubmitInfoService {
 
-    @Autowired
-    private UserMapper userMapper;
+
 
 
     @Autowired
@@ -31,7 +30,7 @@ public class UserSubmitInfoServiceImpl implements UserSubmitInfoService {
      * @return
      */
     @Override
-    public UserMonthSubmitDto getMonthSubmit(int uid) {
+    public UserMonthSubmitDto getMonthSubmit(long uid) {
 //        拿到今年有的数据
         List<UserMonthSubmit> perMonthUserSubmit = userRankMapper.getPerMonthUserSubmit(uid, DateUtils.getYear());
         UserMonthSubmitDto userMonthSubmitDto = new UserMonthSubmitDto();
@@ -48,13 +47,12 @@ public class UserSubmitInfoServiceImpl implements UserSubmitInfoService {
      * @param uid
      */
     @Override
-    public List<List<Object>> getDaySubmit(int uid) {
+    public List<List<Object>> getDaySubmit(long uid) {
         String year = DateUtils.getYear()+"%";
         List<List<Object>> daySubmit =  new ArrayList<>();
         List<UserDaySubmit> perDayUserSubmit = userRankMapper.getPerDayUserSubmit(uid, year);
         UserDaySubmitDto userDaySubmitDto = new UserDaySubmitDto();
         for (UserDaySubmit userDaySubmit : perDayUserSubmit) {
-            System.out.println(userDaySubmit + " ====================================================");
             userDaySubmitDto.getDaySubmitMap().put(userDaySubmit.getSubmitDate(),userDaySubmit.getSubmit());
         }
 

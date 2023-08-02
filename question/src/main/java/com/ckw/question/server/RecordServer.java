@@ -8,11 +8,11 @@ import java.util.Map;
 
 public interface RecordServer {
 
-    List<SubmitRecord> getSubmitRecordList(int uid,int qid,int page);
+    List<SubmitRecord> getSubmitRecordList(long uid,long qid,int page);
 
-    List<SubmitRecord> getSubmitRecordList(int qid,int page);
+    List<SubmitRecord> getSubmitRecordList(long qid,int page);
 
-    List<SubmitRecord> getSubmitRecordListWithUid(int uid,int page);
+    List<SubmitRecord> getSubmitRecordListWithUid(long uid,int page);
 
 
 }

@@ -26,6 +26,11 @@
         </dependency>
         <dependency>
             <groupId>com.ckw</groupId>
+            <artifactId>blog_sys</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ckw</groupId>
             <artifactId>judger</artifactId>
             <version>1.0.0</version>
         </dependency>

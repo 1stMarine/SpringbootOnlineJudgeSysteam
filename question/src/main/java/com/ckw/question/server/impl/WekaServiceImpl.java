@@ -195,7 +195,7 @@ public class WekaServiceImpl implements WekaService {
     }
 
     @Override
-    public Map<Integer, List<SubmitRecord>> calculate(int mid) {
+    public Map<Integer, List<SubmitRecord>> calculate(long mid) {
 //        查到某竞赛的全部提交记录
         Map<Integer, List<SubmitRecord>> cluster = new HashMap<>();
 

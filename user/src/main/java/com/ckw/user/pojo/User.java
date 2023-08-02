@@ -1,5 +1,7 @@
 package com.ckw.user.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,22 +10,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     private String nickName;
     private String email;
+    private String verCode;
     private String password;
-    private int experience;
-    private int level;
+    private Integer experience;
+    private Integer level;
     private String location;
     private String school;
     private String tag;
     private String gender;
-    private int easyResolve;
-    private int meddleResolve;
-    private int hardResolve;
-    private int nightmareResolve;
+    private Integer easyResolve;
+    private Integer meddleResolve;
+    private Integer hardResolve;
+    private Integer nightmareResolve;
     private String role;
     private String url;
     private String token;
-    private int rank;
+    private Integer rank;
+    private Long fans;
+    private Long subscribe;
+    private String sign;
+    private Integer ban;
 }

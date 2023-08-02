@@ -1,5 +1,7 @@
 package com.ckw.judger.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +21,14 @@ public class TestPack {
     /**
      * 必须 : 用户id
      */
-    private int uid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long uid;
     private String userName;
     /**
      * 必须 : 题目id
      */
-    private int qid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long qid;
     /**
      * 题目名称
      */
@@ -44,7 +48,8 @@ public class TestPack {
     /**
      * 比赛id
      */
-    private Integer mid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long mid;
     /**
      * 测试样例对象集合
      */

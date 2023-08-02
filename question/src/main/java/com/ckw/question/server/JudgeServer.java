@@ -13,13 +13,13 @@ public interface JudgeServer {
 
     TestResult normalJudge(TestPack testPack);
 
-    public TestResult doJudge(TestPack testPack);
+    TestResult doJudge(TestPack testPack);
 
-    public List<TestSample> getTestSamples(int id);
+    List<TestSample> getTestSamples(long id);
 
     boolean saveSubmitRecord(SubmitRecord submitRecord);
 
-    void updateExperienceAndLevel(int qid,int id);
+    void updateExperienceAndLevel(long qid,long id);
 
 
 }

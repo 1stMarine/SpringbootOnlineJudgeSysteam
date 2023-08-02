@@ -58,7 +58,7 @@ public class xmlUtils {
 
         System.out.println(aPrivate);
 
-        int id = SnowflakeIdWorker.nextId();
+        long id = SnowflakeIdWorker.snowFlow.nextId();
 
         TestSamples testSamples = new TestSamples(
                 0,

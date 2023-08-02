@@ -37,7 +37,7 @@ public class MatchServiceImpl implements MatchService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean addMatch(Match match) {
-        match.setId(SnowflakeIdWorker.nextId());
+        match.setId(SnowflakeIdWorker.snowFlow.nextId());
         match.setState("未开始");
         match.setCreateTime(new SimpleDateFormat("yyyy-MM-dd- HH:mm").format(System.currentTimeMillis()));
         matchMapper.addMatch(match);
@@ -54,15 +54,24 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean addMatchQuestion(List<Integer> qid,int mid) {
+    public boolean addMatchQuestion(List<String> qid,long mid) {
         return matchMapper.addMatchQuestion(qid,mid);
+    }
+
+    /**
+     * @param mid
+     * @return
+     */
+    @Override
+    public boolean deleteMatchQuestion(String mid) {
+        return matchMapper.deleteMatchQuestion(mid);
     }
 
     @Override
     @Transactional
-    public Match getMatchDetail(int mid) {
+    public Match getMatchDetail(long mid) {
 //        拿到比赛题目的id
-        List<Integer> matchQuestionIds = matchMapper.getMatchQuestionIds(mid);
+        List<String> matchQuestionIds = matchMapper.getMatchQuestionIds(mid);
 //        根据得到id查题目内容
         List<Question> matchQuestion = new ArrayList<>();
         if(matchQuestionIds.size() != 0){
@@ -78,18 +87,18 @@ public class MatchServiceImpl implements MatchService {
 
     @Transactional
     @Override
-    public boolean participateMatch( int uid,int mid) {
+    public boolean participateMatch(long uid,long mid) {
         matchMapper.addParticipateCount(mid);
         return matchMapper.addMatchUser(uid,mid);
     }
 
     @Override
-    public List<String> getUserMatch(int uid) {
+    public List<String> getUserMatch(long uid) {
         return matchMapper.getUserMatch(uid);
     }
 
     @Override
-    public List<MatchResult> getMatchResult(int mid) {
+    public List<MatchResult> getMatchResult(long mid) {
         return recordMapper.getMatchResult(mid);
     }
 
@@ -100,8 +109,44 @@ public class MatchServiceImpl implements MatchService {
      * @return
      */
     @Override
-    public boolean deleteMatch(int mid) {
+    public boolean deleteMatch(long mid) {
         return matchMapper.deleteMatch(mid);
+    }
+
+    /**
+     * 检查这个用户有没有参加这个竞赛
+     *
+     * @param uid
+     * @param mid
+     * @return
+     */
+    @Override
+    public boolean checkUserParticipateMatch(long uid, long mid) {
+        return matchMapper.checkUserParticipateMatch(uid, mid) >= 1;
+    }
+
+    /**
+     * @param mid
+     * @return
+     */
+    @Override
+    public List<String> getMatchUserImgUrl(long mid) {
+        return matchMapper.getMatchUserImgUrl(mid);
+    }
+
+    /**
+     * @param match
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean updateMatchInfo(Match match) {
+        log.info(match.toString());
+        boolean done = false;
+        done = matchMapper.deleteMatchQuestion(String.valueOf(match.getId()));
+        done = matchMapper.addMatchQuestion(match.getQuestionIds(), match.getId());
+        done = matchMapper.updateMatch(match);
+        return done;
     }
 
 

@@ -19,13 +19,13 @@ public interface QuestionMapper {
          * @param id
          * @return 题目对象
          */
-        Question queryQuestion(int id);
+        Question queryQuestion(long id);
 
         /**
          * 得到所有题目
          * @return
          */
-        List<Question> queryQuestionList(int page,int uid);
+        List<Question> queryQuestionList(long page);
 
         /**
          * 插入一道题目
@@ -46,36 +46,61 @@ public interface QuestionMapper {
          * @param id 题目id
          * @return 测试样例对象
          */
-        TestSamples getTestSample(int id);
+        TestSamples getTestSample(long id);
 
         /**
          * 得到题目的时间限制
          * @param id 题目id
          * @return 时间限制,单位秒
          */
-        int getQuestionTimeLimit(int id);
+        int getQuestionTimeLimit(long id);
 
         /**
          * 而得到题目的空间限制
          * @param id 题目id
          * @return 空间限制单位kb
          */
-        int getQuestionMemoryLimit(int id);
+        int getQuestionMemoryLimit(long id);
 
+        /**
+         * 搜索题目
+         * @param page
+         * @param search
+         * @return
+         */
         List<Question> searchQuestion(int page,String search);
 
-        boolean addTotalCount(int totalPass,int totalAttempt,int id);
+        /**
+         * 增加 总通过 和 总尝试
+         * @param totalPass 通过
+         * @param totalAttempt 尝试
+         * @param id 题目id
+         * @return
+         */
+        boolean addTotalCount(int totalPass,int totalAttempt,long id);
 
-        String getQuestionDifficulty(int qid);
+        /**
+         * 得到题目的难度
+         * @param qid
+         * @return
+         */
+        String getQuestionDifficulty(long qid);
 
+        /**
+         * 得到容易、中等、困难、噩梦难度的题目
+         * @return
+         */
         List<Question> getQuestionSelectEasy();
         List<Question> getQuestionSelectMeddle();
-
         List<Question> getQuestionSelectHard();
-
         List<Question> getQuestionSelectNightMare();
 
-        List<Question> getMatchQuestion(List<Integer> qid);
+        /**
+         * 通过题目id列表得到题目对象
+         * @param qid
+         * @return
+         */
+        List<Question> getMatchQuestion(List<String> qid);
 
         /**
          * 统计所有题目数量
@@ -83,5 +108,38 @@ public interface QuestionMapper {
          */
         int countQuestion();
 
-        List<String> getMatchQuestionIds(int mid);
+        /**
+         * 得到竞赛的题目id
+         * @param mid
+         * @return
+         */
+        List<Long> getMatchQuestionIds(long mid);
+
+        /**
+         * 得到用户做过的题目id
+         * @param uid
+         * @return
+         */
+        List<Long> getUserResolveQid(long uid);
+
+        /**
+         * 改变题目信息
+         * @param question
+         * @return
+         */
+        boolean changeQuestionInfo(Question question);
+
+        /**
+         * 改变题目测试数据
+         * @param testSamples
+         * @return
+         */
+        boolean changeQuestionTestSample(TestSamples testSamples);
+
+        /**
+         * 删除题目
+         * @param qid
+         * @return
+         */
+        boolean deleteQuestion(String qid);
 }

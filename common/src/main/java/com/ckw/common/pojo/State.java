@@ -10,6 +10,7 @@ public class State {
 
     public static int UNAUTHORIZED = 40002;
 
+    public static int BAN = 77777;
 
     public static String RECORD_AC_MARK = "Accept";
 

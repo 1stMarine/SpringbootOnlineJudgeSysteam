@@ -25,7 +25,7 @@ public class UserQuestionServiceImpl implements UserQuestionService {
      * @return
      */
     @Override
-    public List<UserResolveDto> getUserResolve(int uid) {
+    public List<UserResolveDto> getUserResolve(long uid) {
         UserResolve perDifficultySolve = recordMapper.getPerDifficultySolve(uid);
 
         List<UserResolveDto> objects = new ArrayList<>();
@@ -41,7 +41,7 @@ public class UserQuestionServiceImpl implements UserQuestionService {
      * @return
      */
     @Override
-    public List<UserResolveDto> getUserResolveWithPercent(int uid) {
+    public List<UserResolveDto> getUserResolveWithPercent(long uid) {
         UserResolve perDifficultySolve = recordMapper.getPerDifficultySolve(uid);
 
         int easy = recordMapper.countPerDifficultyCount("简单");
@@ -51,10 +51,10 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         System.out.println("=============================================================== " + easy + " --- --- ---" + perDifficultySolve.getEasyResolve() / easy);
 
         List<UserResolveDto> objects = new ArrayList<>();
-        objects.add(new UserResolveDto((double) perDifficultySolve.getEasyResolve() / easy * 100, "简单"));
-        objects.add(new UserResolveDto((double) perDifficultySolve.getMeddleResolve() / meddle * 100, "中等"));
-        objects.add(new UserResolveDto((double) perDifficultySolve.getHardResolve() / hard * 100, "困难"));
-        objects.add(new UserResolveDto((double) perDifficultySolve.getNighmareRresolve() / nightmare * 100, "噩梦"));
+        objects.add(new UserResolveDto( Double.parseDouble(String.format("%.2f",(double)perDifficultySolve.getEasyResolve() / easy * 100)), "简单"));
+        objects.add(new UserResolveDto( Double.parseDouble(String.format("%.2f",(double) perDifficultySolve.getMeddleResolve() / meddle * 100)), "中等"));
+        objects.add(new UserResolveDto(Double.parseDouble(String.format("%.2f",(double) perDifficultySolve.getHardResolve() / hard * 100)), "困难"));
+        objects.add(new UserResolveDto(Double.parseDouble(String.format("%.2f",(double) perDifficultySolve.getNighmareRresolve() / nightmare * 100)), "噩梦"));
         return objects;
     }
 }

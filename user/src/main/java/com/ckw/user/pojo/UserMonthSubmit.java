@@ -1,5 +1,7 @@
 package com.ckw.user.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMonthSubmit {
-    private int id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long id;
     private int year;
     private int month;
-    private int uid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long uid;
     private int count;
 
 }

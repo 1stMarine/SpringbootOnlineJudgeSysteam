@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserSubmitInfoService {
 
-    UserMonthSubmitDto getMonthSubmit(int uid );
+    UserMonthSubmitDto getMonthSubmit(long uid );
 
-    List<List<Object>> getDaySubmit (int uid);
+    List<List<Object>> getDaySubmit (long uid);
 
 
 }

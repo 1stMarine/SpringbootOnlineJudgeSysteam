@@ -23,20 +23,20 @@ public interface UserRankMapper {
      * @param uid
      * @return
      */
-    List<UserMonthSubmit> getPerMonthUserSubmit(int uid, int year);
+    List<UserMonthSubmit> getPerMonthUserSubmit(long uid, int year);
 
-    List<UserDaySubmit> getPerDayUserSubmit(int uid,String year);
-
-
-    int checkDaySubmit(String date,int uid);
-
-    boolean insertDaySubmit(String date,int uid);
-
-    boolean addDayUserSubmit(String date,int uid);
+    List<UserDaySubmit> getPerDayUserSubmit(long uid,String year);
 
 
-    int checkMonthSubmit(int year,int month,int uid);
+    int checkDaySubmit(String date,long uid);
 
-    boolean insertMonthSubmit(int year,int month,int uid);
-    boolean addMonthUserSubmit(int year,int month,int uid);
+    boolean insertDaySubmit(String date,long uid);
+
+    boolean addDayUserSubmit(String date,long uid);
+
+
+    int checkMonthSubmit(int year,int month,long uid);
+
+    boolean insertMonthSubmit(int year,int month,long uid);
+    boolean addMonthUserSubmit(int year,int month,long uid);
 }

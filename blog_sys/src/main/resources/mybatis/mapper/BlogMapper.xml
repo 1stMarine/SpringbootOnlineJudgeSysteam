@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应mapper接口所在的位置-->
+<mapper namespace="com.ckw.blog_sys.mapper.BlogMapper">
+    <insert id="insertBlog" parameterType="com.ckw.blog_sys.pojo.Blog">
+        insert into oj_blog_list values (
+                                         #{id},
+                                         #{uid},
+                                         #{type},
+                                         #{time},
+                                         #{title},
+                                         #{context},
+                                         #{faceImage},
+                                         #{tag},
+                                         #{adminTags},0,0,0
+                                        )
+    </insert>
+    <select id="getBlogList" resultMap="BlogMap">
+        select *,
+               IFNULL((select state from oj_blog_user_like where oj_blog_user_like.uid = #{param3} and bid = oj_blog_list.id) ,0) as like_state,
+               IFNULL((select state from oj_blog_user_star where oj_blog_user_star.uid = #{param3} and bid = oj_blog_list.id) ,0) as star_state
+        from oj_blog_list
+            left join oj_user on oj_user.id = oj_blog_list.uid
+            <if test="param4 != '#all'">
+                where type like #{param4}
+            </if>
+            order by oj_blog_list.time desc
+            limit #{param1},#{param2}
+    </select>
+    <select id="queryBlog" resultMap="BlogMap">
+        select *,
+               IFNULL((select state from oj_blog_user_like where oj_blog_user_like.uid = #{param1} and bid = oj_blog_list.id) ,0) as like_state,
+               IFNULL((select state from oj_blog_user_star where oj_blog_user_star.uid = #{param1} and bid = oj_blog_list.id) ,0) as star_state,
+               IFNULL((select state from oj_user_subscribe where fans_uid = #{param1} and uid = oj_blog_list.uid) ,0) as subscribe_state
+        from oj_blog_list
+            left join oj_user on oj_user.id = oj_blog_list.uid
+        where oj_blog_list.id = #{param2}
+    </select>
+    <resultMap id="BlogMap" type="com.ckw.blog_sys.pojo.Blog">
+        <result column="id" property="id"/>
+        <result column="blog_context" property="context"/>
+        <result column="title" property="title"/>
+        <result column="type" property="type"/>
+        <result column="like_count" property="like"/>
+        <result column="star" property="star"/>
+        <result column="tag" property="tag"/>
+        <result column="face_image" property="faceImage"/>
+        <result column="time" property="time"/>
+        <result column="comment" property="comment"/>
+        <result column="like_state" property="likeState"/>
+        <result column="star_state" property="starState"/>
+        <result column="admin_tags" property="adminTags"/>
+        <result column="subscribe_state" property="subscribeState"/>
+        <association property="user" javaType="com.ckw.user.pojo.User">
+            <result column="uid" property="id"/>
+            <result column="nick_name" property="nickName"/>
+            <result column="email" property="email"/>
+            <result column="level" property="level"/>
+            <result column="location" property="location"/>
+            <result column="school" property="school"/>
+            <result column="tag" property="tag"/>
+            <result column="gender" property="gender"/>
+            <result column="url" property="url"/>
+            <result column="sign" property="sign"/>
+            <result column="fans" property="fans"/>
+            <result column="subscribe" property="subscribe"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryLikeState" resultType="integer">
+        select state from oj_blog_user_like where uid = #{param1} and bid = #{param2}
+    </select>
+
+    <select id="queryStarState" resultType="integer">
+        select state from oj_blog_user_star where uid = #{param1} and bid = #{param2}
+    </select>
+
+
+<!--    1 为点赞,无数据或者为0，等于没点赞-->
+    <insert id="newUserLike" parameterType="long">
+        insert into oj_blog_user_like values (null,#{param2},#{param1},1)
+    </insert>
+    <!--    1 为收藏,无数据或者为0，等于没收藏-->
+    <insert id="newUserStar" parameterType="long">
+        insert into oj_blog_user_star values (null,#{param2},#{param1},1)
+    </insert>
+    <update id="changeUserLikeState">
+        update oj_blog_user_like set state = #{param3} where uid = #{param1} and bid = #{param2}
+    </update>
+    <update id="changeUserStarState">
+        update oj_blog_user_star set state = #{param3} where uid = #{param1} and bid = #{param2}
+    </update>
+    <update id="changeBlogLikeCount">
+        update oj_blog_list set like_count = like_count + #{param2} where id = #{param1}
+    </update>
+
+    <update id="changeBlogStarCount">
+        update oj_blog_list set star = star + #{param2} where id = #{param1}
+    </update>
+
+    <update id="addBlogCommentsCount">
+        update oj_blog_list set comment = comment + #{param2} where id = #{param1}
+    </update>
+
+    <select id="queryBlogByContent" resultMap="BlogMap">
+        select *,
+               IFNULL((select state from oj_blog_user_like where oj_blog_user_like.uid = #{param1} and bid = oj_blog_list.id) ,0) as like_state,
+               IFNULL((select state from oj_blog_user_star where oj_blog_user_star.uid = #{param1} and bid = oj_blog_list.id) ,0) as star_state
+        from oj_blog_list
+                 left join oj_user on oj_user.id = oj_blog_list.uid
+        where oj_blog_list.title like concat('%',#{param2},'%')
+    </select>
+
+    <delete id="removeBlog">
+        delete from oj_blog_list where id = #{bid}
+    </delete>
+</mapper>

@@ -1,5 +1,7 @@
 package com.ckw.judger.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,12 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestResult {
-
-    private int uid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long uid;
 
     private String questionName;
-
-    private int qid;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long qid;
 
     private Double time;
 

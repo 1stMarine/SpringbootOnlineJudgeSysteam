@@ -36,11 +36,15 @@
         </foreach>
     </insert>
 
+    <delete id="deleteMatchQuestion">
+        delete from oj_match_question where mid = #{mid}
+    </delete>
+
     <select id="getMatchDetail" resultType="com.ckw.match.pojo.Match">
         select * from oj_match_list where id = #{id}
     </select>
 
-    <select id="getMatchQuestionIds" resultType="integer">
+    <select id="getMatchQuestionIds" resultType="java.lang.String">
         select qid from oj_match_question where mid = #{mid}
     </select>
 
@@ -57,8 +61,10 @@
     <update id="endMatch">
         update oj_match_list set state = '已结束' where id = #{mid}
     </update>
-
-    <select id="getMatchUser" resultType="int">
+    <select id="checkUserParticipateMatch" resultType="int">
+        select count(id) from oj_match_user where uid = #{param2} and mid = #{param1}
+    </select>
+    <select id="getMatchUser" resultType="long">
         select uid from oj_match_user where mid = #{mid}
     </select>
 
@@ -72,5 +78,19 @@
 
     <update id="addParticipateCount">
         update oj_match_list set participation_count = participation_count + 1 where id = #{mid}
+    </update>
+
+    <select id="getMatchUserImgUrl" resultType="string">
+        select url from oj_match_user left join oj_user ou on ou.id = oj_match_user.uid where mid = #{mid} limit 0,3
+    </select>
+
+    <update id="updateMatch" parameterType="com.ckw.match.pojo.Match">
+        update oj_match_list
+        set match_name =  #{matchName},
+        match_description = #{matchDescription},
+        start_time = #{startTime},
+        end_time = #{endTime},
+        img_url = #{imgUrl}
+        where id = #{id}
     </update>
 </mapper>

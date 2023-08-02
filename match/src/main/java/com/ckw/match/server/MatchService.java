@@ -11,20 +11,39 @@ public interface MatchService {
 
     List<Match> getMatchList();
 
-    boolean addMatchQuestion(List<Integer> qid,int mid);
+    boolean addMatchQuestion(List<String> qid,long mid);
 
-    Match getMatchDetail(int mid);
+    boolean deleteMatchQuestion(String mid);
 
-    boolean participateMatch(int mid,int uid);
+    Match getMatchDetail(long mid);
 
-    List<String> getUserMatch(int uid);
+    boolean participateMatch(long mid,long uid);
 
-    List<MatchResult> getMatchResult(int mid);
+    List<String> getUserMatch(long uid);
+
+    List<MatchResult> getMatchResult(long mid);
 
     /**
      * 删除一个竞赛
      * @param mid
      * @return
      */
-    boolean deleteMatch(int mid);
+    boolean deleteMatch(long mid);
+
+    /**
+     * 检查这个用户有没有参加这个竞赛
+     * @param uid
+     * @param mid
+     * @return
+     */
+    boolean checkUserParticipateMatch(long uid,long mid);
+
+    /**
+     * 得到参加这个竞赛的用户头像(前三个)
+     * @param mid
+     * @return
+     */
+    List<String> getMatchUserImgUrl(long mid);
+
+    boolean updateMatchInfo(Match match);
 }

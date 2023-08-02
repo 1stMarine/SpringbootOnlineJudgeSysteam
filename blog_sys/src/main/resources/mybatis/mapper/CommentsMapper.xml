@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应mapper接口所在的位置-->
+<mapper namespace="com.ckw.blog_sys.mapper.CommentsMapper">
+    <insert id="insertComments" parameterType="com.ckw.blog_sys.pojo.Comments">
+        insert into oj_blog_comments values(
+                                            #{id},
+                                            #{blogUid},
+                                            #{commentsUid},
+                                            #{bid},
+                                            #{time},
+                                            #{context},
+                                            #{commentsContext},
+                                            #{like},
+                                            #{star}
+                                           )
+    </insert>
+
+    <select id="getBLogComments" resultMap="commentsMap">
+        select *,
+            IFNULL((select state from oj_comments_user_like where oj_comments_user_like.uid = #{param2} and cid = obc.id) ,0) as like_state,
+               ou2.nick_name as comments_nick_name
+             ,obc.id as cid
+             ,ou2.email as comments_email
+             ,ou2.level as comments_level
+             ,ou2.location as comments_location
+             ,ou2.school as comments_school
+             ,ou2.tag as comments_tag
+             ,ou2.gender as comments_gender
+             ,ou2.url as comments_url
+             ,ou2.sign as comments_sign
+             ,ou2.fans as comments_fans
+             ,ou2.subscribe as comments_subscribe
+             ,obc.context as comments_context
+             ,obc.reply as reply
+        from oj_blog_comments obc
+                 left join oj_user ou on obc.blog_uid = ou.id
+                 left join oj_user ou2 on obc.comments_uid = ou2.id
+                 left join oj_blog_list obl on obc.bid = obl.id
+        where bid = #{param1}
+    </select>
+    <resultMap id="commentsMap" type="com.ckw.blog_sys.pojo.Comments">
+        <result column="cid" property="id"/>
+        <result column="blog_uid" property="blogUid"/>
+        <result column="comments_uid" property="commentsUid"/>
+        <result column="bid" property="bid"/>
+        <result column="time" property="time"/>
+        <result column="reply" property="context"/>
+        <result column="comments_context" property="commentsContext"/>
+        <result column="like_count" property="like"/>
+        <result column="star" property="star"/>
+        <result column="like_state" property="likeState"/>
+        <association property="user" javaType="com.ckw.user.pojo.User">
+            <result column="blog_uid" property="id"/>
+            <result column="nick_name" property="nickName"/>
+            <result column="email" property="email"/>
+            <result column="level" property="level"/>
+            <result column="location" property="location"/>
+            <result column="school" property="school"/>
+            <result column="tag" property="tag"/>
+            <result column="gender" property="gender"/>
+            <result column="url" property="url"/>
+            <result column="sign" property="sign"/>
+            <result column="fans" property="fans"/>
+            <result column="subscribe" property="fans"/>
+        </association>
+        <association property="commentsUser" javaType="com.ckw.user.pojo.User">
+            <result column="comments_uid" property="id"/>
+            <result column="comments_nick_name" property="nickName"/>
+            <result column="comments_email" property="email"/>
+            <result column="comments_level" property="level"/>
+            <result column="comments_location" property="location"/>
+            <result column="comments_school" property="school"/>
+            <result column="comments_tag" property="tag"/>
+            <result column="comments_gender" property="gender"/>
+            <result column="comments_url" property="url"/>
+            <result column="comments_sign" property="sign"/>
+            <result column="comments_fans" property="fans"/>
+            <result column="comments_subscribe" property="subscribe"/>
+        </association>
+    </resultMap>
+
+    <select id="queryLikeState" resultType="integer">
+        select state from oj_comments_user_like where uid = #{param1} and cid = #{param2}
+    </select>
+
+    <!--    1 为点赞,无数据或者为0，等于没点赞-->
+    <insert id="newUserLike" parameterType="long">
+        insert into oj_comments_user_like values (null,#{param2},#{param1},1)
+    </insert>
+
+    <update id="changeUserLikeState">
+        update oj_comments_user_like set state = #{param3} where uid = #{param1} and cid = #{param2}
+    </update>
+
+    <update id="changeCommentsLikeCount">
+        update oj_blog_comments set like_count = like_count + #{param2} where id = #{param1}
+    </update>
+
+    <delete id="removeComments">
+        delete from oj_blog_comments where id = #{cid}
+    </delete>
+
+
+</mapper>

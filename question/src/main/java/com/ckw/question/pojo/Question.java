@@ -1,5 +1,7 @@
 package com.ckw.question.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,8 @@ public class Question {
     /**
      * 题目id
      */
-    private Integer id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private long id;
     /**
      * 题目名
      */

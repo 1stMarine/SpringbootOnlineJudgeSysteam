@@ -1,4 +1,4 @@
-package com.ckw.common.utils;
+package com.ckw.common.websocket;
 
 import java.util.HashMap;
 import java.util.Map;

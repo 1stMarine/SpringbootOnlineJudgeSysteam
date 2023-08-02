@@ -1,14 +1,18 @@
 package com.ckw.question.server.impl;
 
+import com.ckw.common.pojo.Message;
 import com.ckw.question.mapper.QuestionMapper;
 import com.ckw.question.mapper.RecordMapper;
 import com.ckw.question.pojo.Question;
+import com.ckw.question.pojo.TestSamples;
 import com.ckw.question.server.Questionserver;
 import com.ckw.question.utils.xmlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -50,15 +54,25 @@ public class QuestionServerImpl implements Questionserver {
 
 
     @Override
-    public Question queryQuestion(int id) {
+    public Question queryQuestion(long id) {
         return questionMapper.queryQuestion(id);
     }
 
 
     @Override
-    public List<Question> queryQuestionList(int page,int uid) {
+    public List<Question> queryQuestionList(int page,long uid) {
         page *= 15;
-        return computedPassRate(questionMapper.queryQuestionList(page,uid));
+        List<Long> userResolveQid = questionMapper.getUserResolveQid(uid);
+        List<Question> questions = questionMapper.queryQuestionList(page);
+        System.out.println(userResolveQid);
+        for (Question question : questions) {
+            for (Long integer : userResolveQid) {
+                if(question.getId() == integer){
+                    question.setUid(1);
+                }
+            }
+        }
+        return computedPassRate(questions);
     }
 
 
@@ -90,14 +104,63 @@ public class QuestionServerImpl implements Questionserver {
      * @return 已题目列表
      */
     @Override
-    public List<Integer> getUserResolveQuestionId(int uid) {
+    public List<Long> getUserResolveQuestionId(long uid) {
         return recordMapper.getUserResolveRecord(uid);
+    }
+
+    /**
+     * @param qid
+     * @return
+     */
+    @Override
+    public TestSamples getQuestionTestSample(String qid) {
+        return questionMapper.getTestSample(Long.parseLong(qid));
+    }
+
+    /**
+     * 更改题目信息
+     *
+     * @param question
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean changeQuestionInfo(Question question) {
+        boolean isChange = false;
+        isChange = questionMapper.changeQuestionInfo(question);
+        isChange = questionMapper.changeQuestionTestSample(question.getTestSamples());
+        return isChange;
+    }
+
+    /**
+     * 删除题目
+     *
+     * @param qid
+     * @return
+     */
+    @Override
+    public boolean deleteQuestion(String qid) {
+        return questionMapper.deleteQuestion(qid);
+    }
+
+    /**
+     * 添加题目
+     *
+     * @param question
+     * @return
+     */
+    @Override
+    public boolean addQuestion(Question question) {
+        boolean add = false;
+        add = questionMapper.insertQuestion(question);
+        add = questionMapper.insertTestSamples(question);
+        return add;
     }
 
     public List<Question> computedPassRate(List<Question> questions){
         for (Question question : questions) {
             if(question.getTotalAttempt() != 0){
-                DecimalFormat df = new DecimalFormat("#.0");
+                DecimalFormat df = new DecimalFormat("#.00");
                 question.setPassRate(
                         Double.parseDouble(df.format(((question.getTotalPass() * 1.0) / (question.getTotalAttempt() * 1.0))))
                 );
@@ -144,6 +207,7 @@ public class QuestionServerImpl implements Questionserver {
         }
         return null;
     }
+
 
 
 

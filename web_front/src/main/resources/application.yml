@@ -1,3 +1,13 @@
 spring:
   profiles:
-    active: dev
+    active: prod,blog-prod
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+
+
+
+
+#  文件上传限制

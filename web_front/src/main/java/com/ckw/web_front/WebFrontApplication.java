@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAsync
-@ComponentScan({"com.ckw.judger","com.ckw.common","com.ckw.question","com.ckw.user","com.ckw.web_front","com.ckw.match"})
+@ComponentScan({"com.ckw.judger","com.ckw.common","com.ckw.question","com.ckw.user","com.ckw.web_front","com.ckw.match","com.ckw.blog_sys"})
 @MapperScan("com.ckw")
 public class WebFrontApplication {
 
